@@ -48,7 +48,7 @@
           </thead>
           <tbody>
             @foreach ($users as $user)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                     <td class="p-3 border-b text-left">{{ $user["email"] }}</td>
                     <td class="p-3 border-b text-left">{{ $user["displayName"] }}</td>

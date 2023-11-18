@@ -13,23 +13,29 @@
         <nav class="mb-4">
           <ol class="list-none p-0 inline-flex">
             <li class="flex items-center">
-              <a href="{{ route('toMasterPlay') }}" class="text-blue-500">Master Play</a>
+              <a href="{{ route('toMasterConcession') }}" class="text-blue-500">Master Concession</a>
               <span class="mx-2">/</span>
             </li>
             <li class="flex items-center">
-              <span class="text-gray-700">Add Play</span>
+              <span class="text-gray-700">Add Concession</span>
             </li>
           </ol>
         </nav>
 
-        <h1 class="text-4xl mb-4">Add Play</h1>
+        <h1 class="text-4xl mb-4">Add Concession</h1>
 
-        <form action="{{ route('plays.store') }}" method="POST" class="max-w-lg bg-white p-6 rounded-lg shadow-md">
+        <form action="{{ route('concession.store') }}" method="POST" enctype="multipart/form-data" class="max-w-lg bg-white p-6 rounded-lg shadow-md">
           @csrf
+          <div class="mb-4 dropzone" id="dropzone">
+            <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image :</label>
+            <input type="file" name="image" id="image" class="w-full p-2 border rounded-md" value="{{ old('image') }}">
+            @error('image') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+          </div>
+
           <div class="mb-4">
-            <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
-            <input type="text" name="title" id="title" class="w-full p-2 border rounded-md" placeholder="Enter Title" value="{{ old('title') }}">
-            @error('title') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+            <input type="text" name="name"class="w-full p-2 border rounded-md" placeholder="Enter Name" value="{{ old('name') }}">
+            @error('name') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
           </div>
 
           <div class="mb-4">
@@ -39,62 +45,29 @@
           </div>
 
           <div class="mb-4">
-            <label for="duration" class="block text-gray-700 text-sm font-bold mb-2">Duration: (minutes)</label>
-            <input type="text" name="duration" id="duration" class="w-full p-2 border rounded-md" placeholder="Enter Duration" value="{{ old('duration') }}">
-            @error('duration') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
-          </div>
-
-          <div class="mb-4">
-            <label for="age_rating" class="block text-gray-700 text-sm font-bold mb-2">Age Rating:</label>
-            <select name="age_rating" id="age_rating" class="w-full p-2 border rounded-md">
-              <option value="G" @if (old('age_rating') == "G") selected @endif>General (G)</option>
-              <option value="PG" @if (old('age_rating') == "PG") selected @endif>Parental Guidance (PG)</option>
-              <option value="PG-13" @if (old('age_rating') == "PG-13") selected @endif>Parents Strongly Cautioned (PG-13)</option>
-              <option value="R" @if (old('age_rating') == "R") selected @endif>Restricted (R)</option>
-              <option value="NC-17" @if (old('age_rating') == "NC-17") selected @endif>Adults Only (NC-17)</option>
+            <label for="category" class="block text-gray-700 text-sm font-bold mb-2">Category :</label>
+            <select name="category" class="w-full p-2 border rounded-md">
+              <option value="Food" @if (old('category') == "Food") selected @endif>Food</option>
+              <option value="Beverage" @if (old('category') == "Beverage") selected @endif>Beverage</option>
+              <option value="Merchandise" @if (old('category') == "Merchandise") selected @endif>Merchandise</option>
             </select>
           </div>
 
           <div class="mb-4">
-            <h2 class="text-2xl mb-2">Cast Details</h2>
-            <div class="mb-2">
-              <label for="director" class="block text-gray-700 text-sm font-bold mb-2">Director:</label>
-              <input type="text" name="director" id="director" class="w-full p-2 border rounded-md" placeholder="Enter Director's Name" value="{{ old('director') }}"">
-              @error('director') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
-            </div>
+            <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price:</label>
+            <input type="number" name="price"class="w-full p-2 border rounded-md" placeholder="Enter Price" value="{{ old('price') }}">
+            @error('price') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+          </div>
 
-            <div id="casts-container">
-              <div class="mb-2">
-                <label for="casts[]" class="block text-gray-700 text-sm font-bold mb-2">Cast Member:</label>
-                  @if (old('casts', []) )
-                    @foreach(old('casts', []) as $index => $cast)
-                      <div class="flex items-center mb-2" name="container-cast-inputs">
-
-                        <input type="text" name="casts[]" class="w-full p-2 border rounded-md" placeholder="Enter Cast Member's Name" value="{{ $cast }}">
-                        
-                        @if (count(old('casts', [])) > 1)
-                          <button type="button" onclick="removeCastInput(this)" class="ml-2 bg-red-500 text-white p-2 rounded-md" name="remove-button">Remove</button>
-                        @endif
-
-                      </div>
-                      @error('casts.' . $index)
-                      <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                      @enderror
-                    @endforeach
-                  @else
-                  <div class="flex items-center mb-2" name="container-cast-inputs">
-
-                    <input type="text" name="casts[]" class="w-full p-2 border rounded-md" placeholder="Enter Cast Member's Name" >
-                  </div>
-                  @endif
-              </div>
-
-            </div>
-            <button type="button" onclick="addCastInput()" class="bg-blue-500 text-white p-2 rounded-md mt-2">Add Cast Member</button>
-
+          <div class="mb-4">
+            <label for="stock" class="block text-gray-700 text-sm font-bold mb-2">Stock:</label>
+            <input type="number" name="stock"class="w-full p-2 border rounded-md" placeholder="Enter Stock" value="{{ old('stock') }}">
+            @error('stock') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+          </div>
+          
 
           <div class="text-center">
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Add Play</button>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Add Concession</button>
           </div>
         </form>
       </div>
@@ -102,38 +75,5 @@
   </div>
 
 </body>
-<script>
-  function addCastInput() {
-    
-      const castsContainer = document.getElementById('casts-container');
-      const newCastInput = document.createElement('div');
-      newCastInput.classList.add('flex');
-      newCastInput.classList.add('items-center');
-      newCastInput.classList.add('mb-2');
-      newCastInput.innerHTML = `
-        <input type="text" name="casts[]" class="w-full p-2 border rounded-md" placeholder="Enter Cast Member's Name">
-        <button type="button" onclick="removeCastInput(this)" class="ml-2 bg-red-500 text-white p-2 rounded-md" name="remove-button">Remove</button>
-      `;
 
-      newCastInput.setAttribute("name", "container-cast-inputs"); 
-      castsContainer.appendChild(newCastInput);
-
-      
-      var divsLeft = document.querySelectorAll('[name="container-cast-inputs"]');
-      if (divsLeft.length == 2){
-        document.querySelector('[name="container-cast-inputs"]').innerHTML += `<button type="button" onclick="removeCastInput(this)" class="ml-2 bg-red-500 text-white p-2 rounded-md" name="remove-button">Remove</button>`;
-      }
-  }
-
-  function removeCastInput(button) {
-        const parentDiv = button.parentNode;
-        parentDiv.parentNode.removeChild(parentDiv);
-
-        var divsLeft = document.querySelectorAll('[name="container-cast-inputs"]');
-        if (divsLeft.length == 1) {
-            document.querySelector('[name="remove-button"]').remove();
-        }
-     
-    }
-</script>
 @endsection

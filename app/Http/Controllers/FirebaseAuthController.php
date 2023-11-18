@@ -56,23 +56,7 @@ class FirebaseAuthController extends Controller
             );
 
             $idToken = $signInResult->idToken();
-
-            $fiveMinutes = 300;
-            $oneWeek = new \DateInterval('P7D');
-
-            try {
-                $sessionCookieString = $this->auth->createSessionCookie($idToken, $oneWeek);
-            } catch (FailedToCreateSessionCookie $e) {
-                echo $e->getMessage();
-            }
-
-            try {
-                $verifiedSessionCookie = $this->auth->verifySessionCookie($sessionCookieString);
-            } catch (FailedToVerifySessionCookie $e) {
-                echo 'The Session Cookie is invalid: '.$e->getMessage();
-            }
-
-            $uid = $verifiedSessionCookie->claims()->get('sub');
+            $uid = $signInResult->firebaseUserId();
 
             $user = $this->auth->getUser($uid);
             $request->session()->put('user', $user);
@@ -101,8 +85,6 @@ class FirebaseAuthController extends Controller
 
     public function topup($id, Request $request)
     {
-
-        
         $user = $this->auth->getUser($id);
 
         $currentSaldo = $user->customClaims['saldo'] ?? 0;
@@ -112,10 +94,18 @@ class FirebaseAuthController extends Controller
 
         $this->auth->setCustomUserClaims($id, ['role' => $currentRole,'saldo' => $newSaldo]);
 
-        $user = $this->auth->getUser($id);
-        $request->session()->put('user', $user);;
+        $this->refreshLoggedIn($request);
 
         return redirect()->route('toHome')->with(['msg' => 'Berhasil topup']);
+    }
+
+    public function refreshLoggedIn(Request $request)
+    {
+        $loggedIn = $request->session()->get('user');
+
+        $user = $this->auth->getUser($loggedIn->uid);
+
+        $request->session()->put('user', $user);;
     }
 
 }
