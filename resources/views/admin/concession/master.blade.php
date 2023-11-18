@@ -40,6 +40,7 @@
           <thead>
             <tr>
               <th class="p-3 border-b text-left">No</th>
+              <th class="p-3 border-b text-left">Image</th>
               <th class="p-3 border-b text-left">Name</th>
               <th class="p-3 border-b text-left">Category</th>
               <th class="p-3 border-b text-left">Price</th>
@@ -48,15 +49,16 @@
           </thead>
           <tbody>
             @foreach ($concessions as $concession)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:bg-gray-100 ">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
+                    <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
                     <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['category'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['stock'] }}</td>
                     <td class="p-3 border-b text-left">
                       <a href="{{ route('toEditConcession', $concession['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
-                      <form id="deleteForm_{{ $concession['id'] }}" action="{{ route('concessions.destroy', $concession['id']) }}" method="POST" class="inline">
+                      <form id="deleteForm_{{ $concession['id'] }}" action="{{ route('concession.destroy', $concession['id']) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
                       </form>
