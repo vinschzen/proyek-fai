@@ -1,0 +1,30 @@
+@media print {  
+  @page {
+    size: 400mm 210mm; /* landscape */
+    /* you can also specify margins here: */
+    margin: 25mm;
+    margin-right: 45mm; /* for compatibility with both A4 and Letter */
+  }
+}
+
+
+body {
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 18pt;
+}
+
+p {
+  font-size: 10pt;
+}
+
+
+header, footer, .sidebar {
+    display: none;
+}
+
+#admin-sidebar {
+  display: none;
+}

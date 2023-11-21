@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Auth;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Database;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class PageController extends Controller
 {
@@ -43,27 +45,360 @@ class PageController extends Controller
         return view('admin/dashboard/dashboard');
     }
 
-    public function viewtickets() {
-        return view('admin/history/tickets/history');
+    public function viewtickets(Request $request) {
+        $hticketsSnapshot = $this->database->getReference('htickets')->getSnapshot();
+        $htickets = [];
+        
+        $hticketsData = $hticketsSnapshot->getValue();
+
+        if (is_array($hticketsData)) {
+            foreach ($hticketsData as $hticketKey => $hticketData) {
+                if ($hticketData['specific_user'] != 'Anonymous') 
+                {
+                    $hticketData['specific_user'] = $this->auth->getUser($hticketData['specific_user'])->displayName;
+                }
+
+                $schedulesReference = $this->database->getReference('tschedules/' . $hticketData['schedule_id']);
+                $schedulesSnapshot = $schedulesReference->getSnapshot();
+                $schedulesData = $schedulesSnapshot->getValue();
+                
+                $hticketData['date'] = $schedulesData['date'];
+                $hticketData['theater'] = $schedulesData['theater'];
+                $hticketData['time_end'] = $schedulesData['time_end'];
+                $hticketData['time_start'] = $schedulesData['time_start'];
+
+                $playsReference = $this->database->getReference('tplays/' . $schedulesData['playid']);
+                $playsSnapshot = $playsReference->getSnapshot();
+                $playsData = $playsSnapshot->getValue();
+                $hticketData['title'] = $playsData['title'];
+                $hticketData['poster'] = $playsData['poster'];
+                $hticketData['description'] = $playsData['description'];
+                $hticketData['age_rating'] = $playsData['age_rating'];
+
+                $htickets[] = array_merge(['id' => $hticketKey], $hticketData);
+            }
+        } else {
+            $htickets = [];
+        }
+        
+        $dateFrom = $request->input('date-from');
+        $dateUntil = $request->input('date-until');
+
+        if ($dateFrom || $dateUntil) {
+            $htickets = array_filter($htickets, function ($hticket) use ($dateFrom, $dateUntil) {
+                $ticketDate = strtotime($hticket['date']);
+        
+                if ($dateFrom && $dateUntil) {
+                    if ($ticketDate < strtotime($dateFrom) || $ticketDate > strtotime($dateUntil)) {
+                    }
+                } elseif ($dateFrom) {
+                    if ($ticketDate < strtotime($dateFrom)) {
+                        return false; 
+                    }
+                } elseif ($dateUntil) {
+                    if ($ticketDate > strtotime($dateUntil)) {
+                        return false; 
+                    }
+                }
+                return true;
+            });
+        }
+
+        $filter = $request->input('filter', 'newest');
+        if ($filter === 'oldest') {
+            $htickets = array_reverse($htickets);
+        }
+    
+        $perPage = 6;
+        $currentPage = Paginator::resolveCurrentPage('page');
+
+        $currentItems = array_slice($htickets, ($currentPage - 1) * $perPage, $perPage);
+
+        $htickets = new LengthAwarePaginator(
+            $currentItems,
+            count($htickets),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath()]
+        ); 
+
+        return view('admin/history/tickets/history', compact('htickets'));
     }
 
-    public function detailtickets() {
-        return view('admin/history/tickets/details');
+    public function detailtickets($id) {
+        $hticketsSnapshot = $this->database->getReference("htickets/$id")->getSnapshot();
+        $hticketData = $hticketsSnapshot->getValue();
+        $hticket = [];
+
+        if ($hticketData['specific_user'] != 'Anonymous') 
+        {
+            $user = $this->auth->getUser($hticketData['specific_user']);
+            $hticketData['specific_user'] = $user->displayName;
+            $hticketData['uid'] = $user->uid;
+        }
+
+        $schedulesReference = $this->database->getReference('tschedules/' . $hticketData['schedule_id']);
+        $schedulesSnapshot = $schedulesReference->getSnapshot();
+        $schedulesData = $schedulesSnapshot->getValue();
+        
+        $hticketData['date'] = $schedulesData['date'];
+        $hticketData['theater'] = $schedulesData['theater'];
+        $hticketData['time_end'] = $schedulesData['time_end'];
+        $hticketData['time_start'] = $schedulesData['time_start'];
+
+        $playsReference = $this->database->getReference('tplays/' . $schedulesData['playid']);
+        $playsSnapshot = $playsReference->getSnapshot();
+        $playsData = $playsSnapshot->getValue();
+        $hticketData['title'] = $playsData['title'];
+        $hticketData['poster'] = $playsData['poster'];
+        $hticketData['description'] = $playsData['description'];
+        $hticketData['age_rating'] = $playsData['age_rating'];
+
+        $hticket = array_merge(['id' => $id], $hticketData);
+
+        $dticketsRef = $this->database->getReference('dtickets');
+        $query = $dticketsRef->orderByChild('htickets')->equalTo($id);
+        $dtickets = $query->getValue();
+
+        return view('admin/history/tickets/details', compact('hticket', 'dtickets'));
     }
 
-    public function viewseatings() {
-        return view('admin/history/seatings/history');
+    public function viewseatings(Request $request) {
+        $hseatingsSnapshot = $this->database->getReference('hseatings')->getSnapshot();
+        $hseatings = [];
+        
+        $hseatingsData = $hseatingsSnapshot->getValue();
+
+        if (is_array($hseatingsData)) {
+            foreach ($hseatingsData as $hseatingKey => $hseatingData) {
+                $schedulesReference = $this->database->getReference('tschedules/' . $hseatingData['schedule_id']);
+                $schedulesSnapshot = $schedulesReference->getSnapshot();
+                $schedulesData = $schedulesSnapshot->getValue();
+                
+                $hseatingData['date'] = $schedulesData['date'];
+                $hseatingData['theater'] = $schedulesData['theater'];
+                $hseatingData['time_end'] = $schedulesData['time_end'];
+                $hseatingData['time_start'] = $schedulesData['time_start'];
+
+                $playsReference = $this->database->getReference('tplays/' . $schedulesData['playid']);
+                $playsSnapshot = $playsReference->getSnapshot();
+                $playsData = $playsSnapshot->getValue();
+                $hseatingData['title'] = $playsData['title'];
+                $hseatingData['poster'] = $playsData['poster'];
+                $hseatingData['description'] = $playsData['description'];
+                $hseatingData['age_rating'] = $playsData['age_rating'];
+
+                $hseatings[] = array_merge(['id' => $hseatingKey], $hseatingData);
+            }
+        } else {
+            $hseatings = [];
+        }
+        
+        $dateFrom = $request->input('date-from');
+        $dateUntil = $request->input('date-until');
+
+        if ($dateFrom || $dateUntil) {
+            $hseatings = array_filter($hseatings, function ($hseating) use ($dateFrom, $dateUntil) {
+                $ticketDate = strtotime($hseating['date']);
+        
+                if ($dateFrom && $dateUntil) {
+                    if ($ticketDate < strtotime($dateFrom) || $ticketDate > strtotime($dateUntil)) {
+                    }
+                } elseif ($dateFrom) {
+                    if ($ticketDate < strtotime($dateFrom)) {
+                        return false; 
+                    }
+                } elseif ($dateUntil) {
+                    if ($ticketDate > strtotime($dateUntil)) {
+                        return false; 
+                    }
+                }
+                return true;
+            });
+        }
+
+        $filter = $request->input('filter', 'newest');
+        if ($filter === 'oldest') {
+            $hseatings = array_reverse($hseatings);
+        }
+    
+        $perPage = 6;
+        $currentPage = Paginator::resolveCurrentPage('page');
+
+        $currentItems = array_slice($hseatings, ($currentPage - 1) * $perPage, $perPage);
+
+        $hseatings = new LengthAwarePaginator(
+            $currentItems,
+            count($hseatings),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath()]
+        ); 
+
+        return view('admin/history/seatings/history', compact('hseatings'));
     }
 
-    public function detailseatings() {
-        return view('admin/history/seatings/details');
+    public function detailseatings($id) {
+        $hseatingsSnapshot = $this->database->getReference("hseatings/$id")->getSnapshot();
+        $hseatingData = $hseatingsSnapshot->getValue();
+        $hseating = [];
+
+        $schedulesReference = $this->database->getReference('tschedules/' . $hseatingData['schedule_id']);
+        $schedulesSnapshot = $schedulesReference->getSnapshot();
+        $schedulesData = $schedulesSnapshot->getValue();
+        
+        $hseatingData['date'] = $schedulesData['date'];
+        $hseatingData['theater'] = $schedulesData['theater'];
+        $hseatingData['time_end'] = $schedulesData['time_end'];
+        $hseatingData['time_start'] = $schedulesData['time_start'];
+
+        $playsReference = $this->database->getReference('tplays/' . $schedulesData['playid']);
+        $playsSnapshot = $playsReference->getSnapshot();
+        $playsData = $playsSnapshot->getValue();
+        $hseatingData['title'] = $playsData['title'];
+        $hseatingData['poster'] = $playsData['poster'];
+        $hseatingData['description'] = $playsData['description'];
+        $hseatingData['age_rating'] = $playsData['age_rating'];
+
+        $hseating = array_merge(['id' => $id], $hseatingData);
+
+        $dseatingsRef = $this->database->getReference('dseatings');
+        $query = $dseatingsRef->orderByChild('hseatings')->equalTo($id);
+        $dseatings = $query->getValue();
+
+        return view('admin/history/seatings/details', compact('hseating', 'dseatings'));
     }
 
-    public function viewconcessions() {
-        return view('admin/history/concessions/history');
+    public function viewconcessions(Request $request) {
+        $hordersSnapshot = $this->database->getReference('horder')->getSnapshot();
+        $horders = [];
+        
+        $hordersData = $hordersSnapshot->getValue();
+        if (is_array($hordersData)) {
+            foreach ($hordersData as $horderKey => $horderData) {
+                if ($horderData['specific_user'] != 'Anonymous') 
+                {
+                    $horderData['specific_user'] = $this->auth->getUser($horderData['specific_user'])->displayName;
+                }
+                
+                $dorderRef = $this->database->getReference('dorder');
+                $query = $dorderRef->orderByChild('horder')->equalTo($horderKey);
+                $dorders = $query->getValue();
+
+                foreach ($dorders as $key => $value) {
+                    $concessionId = $dorders[$key]['item'];
+                    $dorders[$key]['name'] = $this->database->getReference("tconcessions/$concessionId")->getValue()['name'];
+                }
+
+                $timestamp = $this->convertFirebaseTimestamp($horderData['created_at']);
+
+                $horders[] = array_merge(['id' => $horderKey, 'dorder' => $dorders, 'timestamp' => $timestamp], $horderData);
+
+
+            }
+        } else {
+            $horders = [];
+        }
+        
+        $dateFrom = $request->input('date-from');
+        $dateUntil = $request->input('date-until');
+
+        if ($dateFrom || $dateUntil) {
+            $horders = array_filter($horders, function ($horder) use ($dateFrom, $dateUntil) {
+                $ticketDate = strtotime($horder['timestamp']);
+        
+                if ($dateFrom && $dateUntil) {
+                    if ($ticketDate < strtotime($dateFrom) || $ticketDate > strtotime($dateUntil)) {
+                    }
+                } elseif ($dateFrom) {
+                    if ($ticketDate < strtotime($dateFrom)) {
+                        return false; 
+                    }
+                } elseif ($dateUntil) {
+                    if ($ticketDate > strtotime($dateUntil)) {
+                        return false; 
+                    }
+                }
+                return true;
+            });
+        }
+
+        $filter = $request->input('filter', 'newest');
+        if ($filter === 'oldest') {
+            $horders = array_reverse($horders);
+        }
+    
+        $perPage = 6;
+        $currentPage = Paginator::resolveCurrentPage('page');
+
+        $currentItems = array_slice($horders, ($currentPage - 1) * $perPage, $perPage);
+
+        $horders = new LengthAwarePaginator(
+            $currentItems,
+            count($horders),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath()]
+        ); 
+
+        return view('admin/history/concessions/history', compact('horders'));
     }
 
-    public function detailconcessions() {
-        return view('admin/history/concessions/details');
+    public function detailconcessions($id) {
+        $hordersSnapshot = $this->database->getReference("horder/$id")->getSnapshot();
+        $horderData = $hordersSnapshot->getValue();
+        $horder = [];
+
+        if ($horderData['specific_user'] != 'Anonymous') 
+        {
+            $horderData['specific_user'] = $this->auth->getUser($horderData['specific_user'])->displayName;
+        }
+        
+        $horder = array_merge(['id' => $id], $horderData);
+        $horder['created_at'] = $this->convertFirebaseTimestamp($horderData['created_at']);
+
+        $dordersRef = $this->database->getReference('dorder');
+        $query = $dordersRef->orderByChild('horder')->equalTo($id);
+        $dorders = $query->getValue();
+        
+        $dorderRef = $this->database->getReference('dorder');
+        $query = $dorderRef->orderByChild('horder')->equalTo($id);
+        $dorders = $query->getValue();
+
+        foreach ($dorders as $key => $value) {
+            $concessionId = $dorders[$key]['item'];
+            $dorders[$key]['name'] = $this->database->getReference("tconcessions/$concessionId")->getValue()['name'];
+            $dorders[$key]['image'] = $this->database->getReference("tconcessions/$concessionId")->getValue()['image'];
+        }
+
+        if (isset($horder['voucher']))
+        {
+
+            foreach ($horder['voucher']['then_get'] as $key => $value) {
+                // $horder['voucher']['then_get']['name'] = $this->database->getReference("tconcessions/$key")->getValue()['name'];
+                // $horder['voucher']['then_get']['image'] = $this->database->getReference("tconcessions/$key")->getValue()['image'];
+                $array = [
+                    'amount'=> $horder['voucher']['then_get'][$key],
+                    'name' => $this->database->getReference("tconcessions/$key")->getValue()['name'],
+                    'image' => $this->database->getReference("tconcessions/$key")->getValue()['image'],
+                ];
+
+                $horder['then_get'][] = $array;
+            }
+        }
+
+        // dd($dorders);
+
+        return view('admin/history/concessions/details', compact('horder', 'dorders'));
+    }
+
+    public function convertFirebaseTimestamp($timestamp)
+    {
+        $timestampInSeconds = $timestamp / 1000;
+
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($timestampInSeconds);
+
+        return $dateTime->format('Y-m-d H:i:s');
     }
 }

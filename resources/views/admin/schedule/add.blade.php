@@ -48,7 +48,7 @@
                 </ul>
             </div>
             @error('play-id') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
-        </div>
+          </div>
 
 
           <div class="mb-4">
@@ -61,6 +61,9 @@
             <label for="time" class="block text-gray-700 text-sm font-bold mb-2">Time:</label>
             <input type="text" name="time" id="time" class="w-full p-2 border rounded-md" placeholder="Enter Time (HH:MM)" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" value="{{ old('time') }}">
             @error('time') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+            @if (Session::get('error'))
+              <p class="text-red-500 text-xs italic">{{ Session::get('error') }}</p>
+            @endif
         </div>
 
           <div class="mb-4">
