@@ -141,9 +141,6 @@ class UserController extends Controller
 
         $this->auth->setCustomUserClaims($id, ['role' => $request->new_role,'saldo' => $currentSaldo]);
 
-        $user = $this->auth->getUser($id);
-        $request->session()->put('user', $user);;
-
         return redirect()->route('toMasterUser')->with('success', 'Role changed');
     }
 

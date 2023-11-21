@@ -12,27 +12,55 @@
       <div class="container mx-auto p-8">
         <h2 class="text-3xl font-semibold mb-8">Concessions History</h2>
 
-        <div class="grid grid-cols-3 gap-4">
-          {{-- @foreach($concessions as $t)
-            <div class="bg-white rounded p-4 shadow-md cursor-pointer" onclick="window.location='{{ route('transaction.details', $transaction->id) }}'">
-              <h3 class="text-xl font-semibold mb-2">{{ $transaction->title }}</h3>
-              <p class="text-gray-600">{{ $transaction->created_at->format('M d, Y H:i A') }}</p>
-            </div>
-          @endforeach --}}
-            <div class="bg-white rounded p-4 shadow-md cursor-pointer" onclick="window.location='{{ route('detailconcessions') }}'"> 
-              <h3 class="text-xl font-semibold mb-2">Title</h3>
-              <p class="text-gray-600">dd - mm - yy</p>
-            </div>
-            <div class="bg-white rounded p-4 shadow-md cursor-pointer" onclick="window.location='{{ route('detailconcessions') }}'">
-              <h3 class="text-xl font-semibold mb-2">Title</h3>
-              <p class="text-gray-600">dd - mm - yy</p>
-            </div>
-            <div class="bg-white rounded p-4 shadow-md cursor-pointer" onclick="window.location='{{ route('detailconcessions') }}'">
-              <h3 class="text-xl font-semibold mb-2">Title</h3>
-              <p class="text-gray-600">dd - mm - yy</p>
-            </div>
-        </div>
+        <div class="flex mb-4">
+          <form method="GET" action="{{ route('viewconcessions') }}">
+            From :
+            <input type="date" class="p-2 border border-gray-300 rounded" name="date-from" value="{{ request('date-from') }}">
+            To :
+            <input type="date" class="p-2 border border-gray-300 rounded" name="date-until" value="{{ request('date-until') }}">
 
+            <select class="p-2 ml-2 border border-gray-300 rounded" name="filter">
+              <option value="newest" @if(request('filter') === 'newest') selected @endif>Newest</option>
+              <option value="oldest" @if(request('filter') === 'oldest') selected @endif>Oldest</option>
+            </select>
+
+            <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
+        </form>
+      
+      
+      </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          @foreach($horders as $o)
+            @if(array_key_exists('id', $o))
+              <div class="bg-white rounded p-4 shadow-md cursor-pointer transition duration-300 ease-in-out hover:bg-gray-200" onclick="window.location='{{ route('detailconcessions', $o['id']) }}'">
+                <div class="grid grid-cols-4 gap-3">
+                  <div class="col-span-2">
+                    <p class="text-gray-600">{{ $o['timestamp'] }} </p>
+                    <p class="text-gray-600">Buyer : {{ $o['specific_user'] }}</p>
+                    <p class="text-gray-600 font-semibold">Total : {{ $o['total'] }}</p>
+                  </div>
+                  <div class="col-span-2">
+                    @php
+                        $concatenatedString = '';
+                    @endphp
+
+                    @foreach ($o['dorder'] as $d)
+                        @php
+                            $concatenatedString .= $d['name'] . ' x' . $d['qty'] . ', ';
+                        @endphp
+                    @endforeach
+
+                    {{ Str::limit($concatenatedString, 40) }}
+                  </div>
+                </div>
+              </div>
+            @endif
+          @endforeach
+            
+        </div>
+        
+        {{ $horders->links() }} 
       </div>
 
     </div>

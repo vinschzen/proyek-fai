@@ -48,12 +48,12 @@
           </thead>
           <tbody>
             @foreach ($schedules as $schedule)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                     <td class="p-3 border-b text-left">{{ $schedule['title'] }}</td>
                     <td class="p-3 border-b text-left">{{ $schedule['theater'] }}</td>
                     <td class="p-3 border-b text-left">{{ $schedule['date'] }}</td>
-                    <td class="p-3 border-b text-left">{{ $schedule['duration'] }}</td>
+                    <td class="p-3 border-b text-left">{{ $schedule['time_start'] . '-' . $schedule['time_end']}}</td>
                     <td class="p-3 border-b text-left">
                       <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
                       <form id="deleteForm_{{ $schedule['id'] }}" action="{{ route('schedule.destroy', $schedule['id']) }}" method="POST" class="inline">
@@ -87,7 +87,6 @@
           confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
           if (result.isConfirmed) {
-              document.getElementById('enableDeletePrompt').disabled = true;
               document.getElementById('deleteForm_' + scheduleId).submit();
           }
       });

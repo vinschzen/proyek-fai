@@ -5,73 +5,93 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css" rel="stylesheet">
 
 <body class="font-sans bg-gray-100">
-
-
   <div class="flex">
-
     @include('layout.admin-side')
-
     <div class="flex-1">
       <div class="container mx-auto p-8">
         <h1 class="text-4xl mb-4">Master Voucher</h1>
 
+
+        @if(Session::has('success'))
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+        @endif
+
         <div class="flex mb-4">
-          <input type="text" class="p-2 border border-gray-300 rounded" placeholder="Search...">
-          <select class="p-2 ml-2 border border-gray-300 rounded">
-            <option value="filter1">Newest</option>
-            <option value="filter2">Older</option>
-            <option disabled>─────────</option>
-            <option value="filter3">Admin</option>
-            <option value="filter4">Staff</option>
-            <option value="filter5">User</option>
-          </select>
+            <form method="GET" action="{{ route('toMasterVoucher') }}">
+              <input type="text" class="p-2 border border-gray-300 rounded" name="search" placeholder="Search by Name" value="{{ request('search') }}">
+              <select class="p-2 ml-2 border border-gray-300 rounded" name="filter">
+                <option value="newest" @if(request('filter') === 'newest') selected @endif>Newest</option>
+                <option value="oldest" @if(request('filter') === 'oldest') selected @endif>Oldest</option>
+              </select>
+              <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
+          </form>
+        
+        
+            <a href="{{ route('toAddVoucher') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add Voucher</a>
         </div>
 
         <table class="w-full border border-collapse border-gray-300 mb-4">
           <thead>
             <tr>
               <th class="p-3 border-b text-left">No</th>
-              <th class="p-3 border-b text-left">Username</th>
-              <th class="p-3 border-b text-left">Email</th>
-              <th class="p-3 border-b text-left">Role</th>
-              {{-- <th class="p-3 border-b text-left">Actions</th> --}}
+              <th class="p-3 border-b text-left">Name</th>
+              <th class="p-3 border-b text-left">Type</th>
+              <th class="p-3 border-b text-left">Validity Period</th>
+              <th class="p-3 border-b text-left">Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="hover:bg-gray-100">
-              <td class="p-3 border-b text-left">1.</td>
-              <td class="p-3 border-b text-left">User1</td>
-              <td class="p-3 border-b text-left">email@email.com</td>
-              <td class="p-3 border-b text-left">Admin</td>
-              <td class="p-3 border-b text-left">
-                <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</button>
-                <button class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Delete</button>
-              </td>
-            </tr>
-            <tr class="hover:bg-gray-100">
-              <td class="p-3 border-b text-left">2.</td>
-              <td class="p-3 border-b text-left">User2</td>
-              <td class="p-3 border-b text-left">email2@email.com</td>
-              <td class="p-3 border-b text-left">Staff</td>
-              <td class="p-3 border-b text-left">
-                <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</button>
-                <button class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Delete</button>
-              </td>
-            </tr>
+            @foreach ($vouchers as $voucher)
+                <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
+                    <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
+                    <td class="p-3 border-b text-left">{{ $voucher['name'] }}</td>
+                    <td class="p-3 border-b text-left">{{ $voucher['type'] }}</td>
+                    <td class="p-3 border-b text-left">{{ $voucher['validity_from'] }} - {{ $voucher['validity_until'] }} </td>
+                    <td class="p-3 border-b text-left">
+                      <a href="{{ route('toEditVoucher', $voucher['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
+                      <form id="deleteForm_{{ $voucher['id'] }}" action="{{ route('voucher.destroy', $voucher['id']) }}" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                      </form>
+                      <button onclick="confirmDelete('{{ $voucher['id'] }}')" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Delete</button>
+                    </td>
+                </tr>
+            @endforeach
           </tbody>
         </table>
 
-        <ul class="flex list-none">
-          <li class="mr-2"><a href="#" class="p-2 border border-gray-300 rounded">1</a></li>
-          <li class="mr-2"><a href="#" class="p-2 border border-gray-300 rounded">2</a></li>
-          <li class="mr-2"><a href="#" class="p-2 border border-gray-300 rounded">3</a></li>
-        </ul>
+        {{ $vouchers->links() }} 
+
       </div>
     </div>
   </div>
 
 </body>
+
+<script>
+  function confirmDelete(voucherId) {
+
+          Swal.fire({
+              title: 'Are you sure?',
+              text: 'You won\'t be able to revert this!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  document.getElementById('deleteForm_' + voucherId).submit();
+              }
+          });
+
+  }
+</script>
 
 @endsection
