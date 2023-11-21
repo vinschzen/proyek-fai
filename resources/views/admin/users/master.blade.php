@@ -7,6 +7,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Z8UJWW3oHlbNLHRg4BqGbObdqt1N4aZRz38+NFRBdNCqEIlFJI7BPFUmVfnH5dP0" crossorigin="anonymous">
+
+
 
 <body class="font-sans bg-gray-100">
   <div class="flex">
@@ -31,8 +34,8 @@
               </select>
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
-        
-        
+
+
             {{-- <a href="{{ route('toAddUser') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add User</a> --}}
         </div>
 
@@ -55,7 +58,10 @@
                     <td class="p-3 border-b text-left">{{ $user["role"] }}</td>
                     <td class="p-3 border-b text-left">{{ $user["status"] }}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditUser', $user['uid']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
+
+                        <a href="{{ route('toEditUser', $user['uid']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700" style="margin-right: 10px">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
 
                       @if ( $user["status"] == "Disabled")
                         <a href="{{ route('users.toggle', $user['uid']) }}" class="bg-green-500 text-white p-2 rounded hover:bg-green-700">Enable</a>
@@ -69,7 +75,7 @@
           </tbody>
         </table>
 
-        {{ $users->links() }} 
+        {{ $users->links() }}
 
       </div>
     </div>
