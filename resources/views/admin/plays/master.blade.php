@@ -61,7 +61,7 @@
                     <td class="p-3 border-b text-left">{{ $play['duration'] }}</td>
                     <td class="p-3 border-b text-left">{{ $play['age_rating'] }}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditPlay', $play['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                      <a href="{{ route('toEditPlay', $play['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700" style="margin-right: 10px">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                       <form id="deleteForm_{{ $play['id'] }}" action="{{ route('plays.destroy', $play['id']) }}" method="POST" class="inline">

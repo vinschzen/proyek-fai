@@ -57,7 +57,7 @@
                     <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['stock'] }}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditConcession', $concession['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                      <a href="{{ route('toEditConcession', $concession['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700" style="margin-right: 10px">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                       <form id="deleteForm_{{ $concession['id'] }}" action="{{ route('concession.destroy', $concession['id']) }}" method="POST" class="inline">

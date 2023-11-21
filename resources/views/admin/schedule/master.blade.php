@@ -55,7 +55,7 @@
                     <td class="p-3 border-b text-left">{{ $schedule['date'] }}</td>
                     <td class="p-3 border-b text-left">{{ $schedule['time_start'] . '-' . $schedule['time_end']}}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                      <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700" style="margin-right: 10px">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                       <form id="deleteForm_{{ $schedule['id'] }}" action="{{ route('schedule.destroy', $schedule['id']) }}" method="POST" class="inline">

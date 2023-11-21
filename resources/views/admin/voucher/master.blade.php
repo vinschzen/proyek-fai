@@ -54,7 +54,7 @@
                     <td class="p-3 border-b text-left">{{ $voucher['type'] }}</td>
                     <td class="p-3 border-b text-left">{{ $voucher['validity_from'] }} - {{ $voucher['validity_until'] }} </td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditVoucher', $voucher['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                      <a href="{{ route('toEditVoucher', $voucher['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700" style="margin-right: 10px">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                       <form id="deleteForm_{{ $voucher['id'] }}" action="{{ route('voucher.destroy', $voucher['id']) }}" method="POST" class="inline">
