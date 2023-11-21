@@ -31,8 +31,8 @@
               </select>
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
-        
-        
+
+
             <a href="{{ route('toAddVoucher') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add Voucher</a>
         </div>
 
@@ -54,7 +54,9 @@
                     <td class="p-3 border-b text-left">{{ $voucher['type'] }}</td>
                     <td class="p-3 border-b text-left">{{ $voucher['validity_from'] }} - {{ $voucher['validity_until'] }} </td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditVoucher', $voucher['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
+                      <a href="{{ route('toEditVoucher', $voucher['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
                       <form id="deleteForm_{{ $voucher['id'] }}" action="{{ route('voucher.destroy', $voucher['id']) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
@@ -66,7 +68,7 @@
           </tbody>
         </table>
 
-        {{ $vouchers->links() }} 
+        {{ $vouchers->links() }}
 
       </div>
     </div>

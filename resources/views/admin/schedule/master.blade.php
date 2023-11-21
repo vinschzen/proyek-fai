@@ -31,8 +31,8 @@
               </select>
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
-        
-        
+
+
             <a href="{{ route('toAddSchedule') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add Schedule</a>
         </div>
 
@@ -55,7 +55,9 @@
                     <td class="p-3 border-b text-left">{{ $schedule['date'] }}</td>
                     <td class="p-3 border-b text-left">{{ $schedule['time_start'] . '-' . $schedule['time_end']}}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
+                      <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
                       <form id="deleteForm_{{ $schedule['id'] }}" action="{{ route('schedule.destroy', $schedule['id']) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
@@ -67,7 +69,7 @@
           </tbody>
         </table>
 
-        {{ $schedules->links() }} 
+        {{ $schedules->links() }}
 
       </div>
     </div>

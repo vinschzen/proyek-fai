@@ -31,8 +31,8 @@
               </select>
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
-        
-        
+
+
             <a href="{{ route('toAddConcession') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add Concession</a>
         </div>
 
@@ -57,7 +57,9 @@
                     <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['stock'] }}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditConcession', $concession['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
+                      <a href="{{ route('toEditConcession', $concession['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
                       <form id="deleteForm_{{ $concession['id'] }}" action="{{ route('concession.destroy', $concession['id']) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
@@ -69,7 +71,7 @@
           </tbody>
         </table>
 
-        {{ $concessions->links() }} 
+        {{ $concessions->links() }}
 
       </div>
     </div>
