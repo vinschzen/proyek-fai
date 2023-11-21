@@ -6,7 +6,10 @@
 @section('content')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <body class="font-sans bg-gray-100">
   <div class="flex">
@@ -48,9 +51,12 @@
           </thead>
           <tbody>
             @foreach ($plays as $play)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
-                    <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $play['poster']) }}" alt="{{ $play['title'] }} Poster" style="width: 50px">                    </td>
+                      <td class="p-3 border-b text-left">
+                        <img src="{{ asset('storage/' . $play['poster']) }}" alt="{{ $play['title'] }} Poster" style="width: 50px"
+                            class="cursor-pointer image-modal-trigger" data-image-url="{{ asset('storage/' . $play['poster']) }}">
+                    </td>
                     <td class="p-3 border-b text-left">{{ $play['title'] }}</td>
                     <td class="p-3 border-b text-left">{{ $play['duration'] }}</td>
                     <td class="p-3 border-b text-left">{{ $play['age_rating'] }}</td>
@@ -73,9 +79,32 @@
     </div>
   </div>
 
+  <div id="imageModal" class="fixed inset-0 z-40 flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    <div class="z-50 mx-auto p-4 bg-white rounded-lg">
+        <img src="" alt="Image Preview" id="modalImage" style="width: 30vw">
+        <div class="mt-4 text-center">
+            <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</div>
+</div>
+
 </body>
 
 <script>
+      $(document).ready(function() {
+        $('.image-modal-trigger').click(function() {
+            var imageUrl = $(this).attr('data-image-url');
+            $('#modalImage').attr('src', imageUrl);
+            $('#imageModal').removeClass('hidden');
+        });
+    });
+
+    function closeModal() {
+        $('#imageModal').addClass('hidden');
+    }
+
   function confirmDelete(playId) {
 
           Swal.fire({
