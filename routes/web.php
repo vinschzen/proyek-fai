@@ -9,6 +9,7 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ConcessionController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,6 +159,9 @@ Route::middleware(['user'])->group(function () {
         Route::get('/concessions', [PageController::class, 'toConcessions'])->name('toConcessions');
     
         Route::get('/topup/{id}', [FirebaseAuthController::class, 'topup'])->name('topup');
+
+        Route::get('/payment', [PaymentController::class, 'payment'])->name('payment');
+        Route::post('/notification', [PaymentController::class, 'notification'])->name('handle');
     
     });
 });
