@@ -154,7 +154,13 @@ Route::middleware(['staff'])->group(function () {
 Route::middleware(['user'])->group(function () {
     Route::group(['prefix' => 'user'], function() {
         Route::get('/home', [PageController::class, 'toHome'])->name('toHome');
+        Route::get('/play/{id}', [PageController::class, 'playDetails'])->name('toPlay');
+        Route::get('/checkout/{id}', [PageController::class, 'toCheckout'])->name('toCheckout');
+        
+        Route::post('/userbuytickets/{id}', [CashierController::class, 'userbuytickets'])->name('user.buytickets');
+
         Route::get('/profile', [PageController::class, 'toProfile'])->name('toProfile');
+        Route::get('/tickets/{id}', [PageController::class, 'toTicket'])->name('toTicket');
         Route::get('/saldo', [PageController::class, 'toSaldo'])->name('toSaldo');
         Route::get('/concessions', [PageController::class, 'toConcessions'])->name('toConcessions');
     
@@ -164,6 +170,10 @@ Route::middleware(['user'])->group(function () {
         Route::post('/notification', [PaymentController::class, 'notification'])->name('handle');
     
     });
+    
+    Route::get('/removefromcart/{id}', [ConcessionController::class, 'removeFromUsersCart'])->name('removeFromUsersCart');
+    Route::get('/addtocart/{id}', [ConcessionController::class, 'addToUsersCart'])->name('addToUsersCart');
+    Route::get('/clearcart', [ConcessionController::class, 'clearUsersCart'])->name('clearUsersCart');
 });
 
 

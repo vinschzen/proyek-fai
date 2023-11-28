@@ -48,6 +48,9 @@
           </thead>
           <tbody>
             @foreach ($schedules as $schedule)
+                @if (isset($schedule['deleted_at']))
+                    @continue
+                @endif
                 <tr class="transition duration-300 ease-in-out  @if ( $schedule['date']  <= date("Y-m-d") ) bg-red-200 hover:bg-red-300 @else bg-gray-200 hover:bg-gray-300  @endif ">
 
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>

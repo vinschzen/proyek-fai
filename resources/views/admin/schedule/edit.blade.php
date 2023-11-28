@@ -43,6 +43,9 @@
             <div id="suggestions" class="absolute bg-white mt-1 w-full rounded-md shadow-lg" style="display: none">
               <ul class="border border-gray-300 max-h-40 overflow-y-auto">
                     @foreach($plays as $title) 
+                        @if (isset($plays['deleted_at']))
+                          @continue
+                        @endif
                         <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $title['title'] }} , {{ $title['id']}}')">{{ $title['title'] }}</li>
                     @endforeach
                 </ul>
@@ -90,7 +93,7 @@
         suggestionsList.innerHTML = '';
 
         const filteredSuggestions = @json($plays).filter(title =>
-            title['title'].toLowerCase().includes(query.toLowerCase())
+            title['title'].toLowerCase().includes(query.toLowerCase()) && !title['deleted_at']
         ).slice(0, 5);
 
         filteredSuggestions.forEach(title => {

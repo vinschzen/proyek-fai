@@ -41,6 +41,9 @@
           </thead>
           <tbody>
             @foreach ($schedules as $schedule)
+                @if (isset($schedule['deleted_at']))
+                    @continue
+                @endif
                 @if ( $schedule['date']  <= date("Y-m-d") ) @continue @endif
 
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">

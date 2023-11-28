@@ -43,7 +43,7 @@
             <div id="suggestions" class="absolute bg-white mt-1 w-full rounded-md shadow-lg" style="display: none">
               <ul class="border border-gray-300 max-h-40 overflow-y-auto">
                     @foreach($plays as $title) 
-                        <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $title['title'] }} , {{ $title['id']}}')">{{ $title['title'] }}</li>
+                          <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $title['title'] }} , {{ $title['id']}}')">{{ $title['title'] }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -89,9 +89,10 @@
         const suggestionsList = suggestionsContainer.querySelector('ul');
         suggestionsList.innerHTML = '';
 
-        const filteredSuggestions = @json($plays).filter(title =>
-            title['title'].toLowerCase().includes(query.toLowerCase())
+        const filteredSuggestions = @json($plays).filter(play =>
+            play['title'].toLowerCase().includes(query.toLowerCase()) && !play['deleted_at']
         ).slice(0, 5);
+
 
         filteredSuggestions.forEach(title => {
             const li = document.createElement('li');

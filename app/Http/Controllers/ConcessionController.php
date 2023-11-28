@@ -166,8 +166,15 @@ class ConcessionController extends Controller
 
     public function destroy($id)
     {
+        $concessionsRef = $this->database->getReference('tconcessions')->getChild($id);
+
         if ($concessionsRef->getSnapshot()->exists()) {
-            $concessionsRef->remove();
+            // $concessionsRef->remove();
+            $concessionsRef->update([
+                'is_deleted' => true,
+                'deleted_at' => time(),
+            ]);
+
             return redirect()->route('toMasterConcession')->with('success', 'Concession deleted successfully');
         }
 
@@ -254,10 +261,57 @@ class ConcessionController extends Controller
         return redirect()->route('toCashierConcessions')->with('success', 'Concession removed from cart');
     }
 
+    public function addToUsersCart($id, Request $request)
+    {
+        $cashier = $request->session()->get('cart') ?? [];
+
+        foreach ($cashier as $key => $value) {
+            if($value['id'] == $id)
+            {
+                $cashier[$key]['qty'] += $request->amount_to_add;
+                $request->session()->put('cart', $cashier);
+                return redirect()->route('toConcessions')->with('success', 'Concession qty added');
+            }
+        }
+
+        $concessionsSnapshot = $this->database->getReference("tconcessions/$id")->getSnapshot();
+        $concessionsData = $concessionsSnapshot->getValue();
+        $concessions = array_merge(['id' => $id, 'qty' => $request->amount_to_add], $concessionsData);
+
+        $cashier[] = $concessions;
+        
+        $request->session()->put('cart', $cashier);
+
+        return redirect()->route('toConcessions')->with('success', 'Concession added to cart');
+    }
+
+    public function removeFromUsersCart($id, Request $request)
+    {
+        $cashier = $request->session()->get('cart') ?? [];
+
+        foreach ($cashier as $key => $value) {
+            if ($value['id'] == $id)
+            {
+                unset($cashier[$key]);
+            }
+        }
+
+        $request->session()->put('cart', $cashier);
+
+        return redirect()->route('toConcessions')->with('success', 'Concession removed from cart');
+    }
+
     public function clearCart(Request $request)
     {
         $request->session()->forget('cashier');
 
         return redirect()->route('toCashierConcessions')->with('success', 'Cart cleared');
+    }
+
+    public function clearUsersCart(Request $request)
+    {
+        $request->session()->forget('cart');
+
+        return redirect()->back();
     }
 }

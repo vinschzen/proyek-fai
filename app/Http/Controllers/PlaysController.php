@@ -162,7 +162,12 @@ class PlaysController extends Controller
         $playRef = $this->database->getReference('tplays')->getChild($id);
 
         if ($playRef->getSnapshot()->exists()) {
-            $playRef->remove();
+            // $playRef->remove();
+            $playRef->update([
+                'is_deleted' => true,
+                'deleted_at' => time(), 
+            ]);
+
             return redirect()->route('toMasterPlay')->with('success', 'Play deleted successfully');
         }
 
