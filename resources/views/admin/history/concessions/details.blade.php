@@ -23,12 +23,109 @@
 
         <h2 class="text-3xl font-semibold mb-8">Concessions Details</h2>
 
-        <div class="bg-white rounded p-8 shadow-md">
-          <h3 class="text-2xl font-semibold mb-4">Title</h3>
-          <p class="text-gray-600 mb-4">Date: DD MM YY</p>
-          <p class="text-gray-700">details</p>
+        {{-- {{dd($horder)}} --}}
+        <div class="bg-white rounded p-4 shadow-md cursor-pointer transition duration-300 ease-in-out mb-8 hover:bg-gray-200">
+          <div class="grid grid-cols-4 gap-3">
+            <div class="col-span-2">
+              <p class="text-gray-600">{{ $horder['created_at'] }} </p>
+              <p class="text-gray-600">Buyer : {{ $horder['specific_user'] }}</p>
+              <p class="text-gray-600 font-semibold">Total : {{ $horder['total'] }}</p>
 
+              @if (isset($horder['voucher']))
+                <p class="text-gray-600">{{ $horder['voucher']['name'] }} </p>
+                <p class="text-gray-600">Discount : {{ $horder['voucher']['discount']  }} %</p>
+              @endif
+
+            </div>
+            <div class="col-span-2">
+              @php
+                  $concatenatedString = '';
+              @endphp
+
+              @foreach ($dorders as $d)
+                  @php
+                      $concatenatedString .= $d['name'] . ' x' . $d['qty'] . ', ';
+                  @endphp
+              @endforeach
+
+              {{ Str::limit($concatenatedString, 40) }}
+            </div>
+          </div>
         </div>
+
+        <table class="w-full border border-collapse border-gray-300 mb-4">
+          <thead>
+            <tr>
+              <th class="p-3 border-b text-left">No</th>
+              <th class="p-3 border-b text-left">Image</th>
+              <th class="p-3 border-b text-left">Name</th>
+              <th class="p-3 border-b text-left">Price</th>
+              <th class="p-3 border-b text-left">Qty</th>
+              <th class="p-3 border-b text-left">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @php
+              $total = 0;
+            @endphp
+            @foreach ($dorders as $concession)
+                <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
+                    <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
+                    <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
+                    <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
+                    <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
+                    <td class="p-3 border-b text-left">{{ $concession['qty'] }}</td>
+                    <td class="p-3 border-b text-left">{{ $concession['price'] * $concession['qty'] }}</td>
+                    @php
+                      $total += ($concession['price'] * $concession['qty']);
+                    @endphp
+                </tr>
+            @endforeach
+                <tr>
+                  <td colspan="3">
+                  </td>
+                  <td>
+                    <td class="p-3 border-b font-bold text-left">
+                      Total :
+                    </td>
+
+                  </td>
+                  <td class="p-3 border-b font-bold text-left">
+                    {{$total}}
+                  </td>
+                </tr>
+          </tbody>
+        </table>
+
+        @if (isset($horder['voucher']))
+          <h2 class="text-3xl font-semibold mb-8">Bonus</h2>
+
+          <table class="w-full border border-collapse border-gray-300 mb-4">
+            <thead>
+              <tr>
+                <th class="p-3 border-b text-left">No</th>
+                <th class="p-3 border-b text-left">Image</th>
+                <th class="p-3 border-b text-left">Name</th>
+                <th class="p-3 border-b text-left">Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach ($horder['then_get'] as $concession)
+                  @php
+                    $image = $concession['image'];
+                  @endphp
+                  <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
+                      <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
+                      <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $image) }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
+                      <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
+                      <td class="p-3 border-b text-left">{{ $concession['amount'] }}</td>
+                  </tr>
+              @endforeach
+            </tbody>
+          </table>
+   
+        @endif
+
 
       </div>
 

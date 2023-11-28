@@ -9,6 +9,7 @@ use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Contract\Database;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
@@ -34,7 +35,6 @@ class ScheduleController extends Controller
                 $playData = $playSnapshot->getValue();
                 
                 $scheduleData['title'] = $playData['title'];
-                $scheduleData['duration'] = $this->calculateTimeRange($scheduleData['time'], $playData['duration']);
 
                 $schedules[] = array_merge(['id' => $scheduleKey], $scheduleData);
 
@@ -69,7 +69,7 @@ class ScheduleController extends Controller
         );
     
 
-        return view('admin/schedule/master', compact('schedules'));
+        return view('admin/schedule/master', compact('schedules')); 
     }
 
     public function viewadd() {
@@ -135,73 +135,38 @@ class ScheduleController extends Controller
         
         $request->validate($rules, $messages);
 
-        $data = $request->only(['playid', 'date', 'time', 'theater']);
+
+        $data = $request->only(['playid', 'date', 'theater']);
+
+        $play = $this->database->getReference("tplays/$request->playid")->getSnapshot()->getValue();
+
+        $data['time_start'] = $request->time;
+        $carbonTime = Carbon::createFromFormat('H:i', $request->time);
+        $newTime = $carbonTime->addMinutes($play['duration']);
+        $newTimeString = $newTime->format('H:i');
+
+        $data['time_end'] = $newTimeString;
+
+        if (!$this->checkOverlap($data['time_start'], $data['time_end'], $data['theater'], $data['date']))
+        {
+            return redirect()->back()->with('error', 'Overlapping schedules');
+        }
 
         $data['created_at'] = ['.sv' => 'timestamp'];
         $data['updated_at'] = ['.sv' => 'timestamp'];
 
-        $playsRef = $this->database->getReference('tschedules')->push();
-        $playsRef->set($data);
+        $schedulesRef = $this->database->getReference('tschedules')->push();
+        $schedulesRef->set($data);
+        
+        $hseatings = [];
+        $hseatings['schedule_id'] = $schedulesRef->getKey();       
+        $hseatings['created_at'] = ['.sv' => 'timestamp'];
+        $hseatings['updated_at'] = ['.sv' => 'timestamp'];
+
+        $hseatingsRef = $this->database->getReference('hseatings')->push();
+        $hseatingsRef->set($hseatings);
 
         return redirect()->route('toMasterSchedule')->with('success', 'Play added successfully');
-    }
-
-    public function toCashierTickets(Request $request) {
-        $schedulesSnapshot = $this->database->getReference('tschedules')->getSnapshot();
-        $schedules = [];
-        
-        $schedulesData = $schedulesSnapshot->getValue();
-
-        if (is_array($schedulesData)) {
-            foreach ($schedulesData as $scheduleKey => $scheduleData) {
-                
-                $playsReference = $this->database->getReference('tplays/' . $scheduleData['playid']);
-                $playSnapshot = $playsReference->getSnapshot();
-                $playData = $playSnapshot->getValue();
-                
-                $scheduleData['title'] = $playData['title'];
-                $scheduleData['duration'] = $this->calculateTimeRange($scheduleData['time'], $playData['duration']);
-
-                $schedules[] = array_merge(['id' => $scheduleKey], $scheduleData);
-
-            }
-        } else {
-            $schedules = [];
-        }
-        
-        $search = $request->input('search');
-        if ($search) {
-            $schedules = array_filter($schedules, function ($schedule) use ($search) {
-                return strpos(strtolower($schedule['title']), strtolower($search)) !== false;
-            });
-        }
-
-        $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
-            $schedules = array_reverse($schedules);
-        }
-    
-        $perPage = 5;
-        $currentPage = Paginator::resolveCurrentPage('page');
-
-        $currentItems = array_slice($schedules, ($currentPage - 1) * $perPage, $perPage);
-
-        $schedules = new LengthAwarePaginator(
-            $currentItems,
-            count($schedules),
-            $perPage,
-            $currentPage,
-            ['path' => Paginator::resolveCurrentPath()]
-        );
-    
-
-        return view('admin/dashboard/cashier-tickets/cashier', compact('schedules'));
-    }
-     
-    function checkoutTickets()
-    {
-        return view('admin/dashboard/cashier-tickets/checkout');
-
     }
 
     function calculateTimeRange($initialTime, $incrementMinutes) {
@@ -216,4 +181,56 @@ class ScheduleController extends Controller
         
         return $rangeString;
     }
+
+    public function destroy($id)
+    {
+        $scheduleRef = $this->database->getReference('tschedules')->getChild($id);
+
+        if ($scheduleRef->getSnapshot()->exists()) {
+            $scheduleRef->remove();
+            return redirect()->route('toMasterSchedule')->with('success', 'Schedule deleted successfully');
+        }
+
+        return redirect()->route('toMasterSchedule')->with('error', 'Schedule not found');
+    }
+
+
+
+    function checkOverlap($newStartTime, $newEndTime, $theater, $date) {
+
+        $existingStarts = [];
+        $existingEnds  = [];
+
+        $schedules = $this->database->getReference("tschedules")->getSnapshot()->getValue();
+        foreach ($schedules as $key => $s) {
+            if ($s['theater'] == $theater && $s['date'] == $date) {
+                $existingStarts[] = $s['time_start'];
+                $existingEnds[] = $s['time_end'];
+            }
+        }
+
+        function isOverlap($newStartTime, $newEndTime, $existingStartTime, $existingEndTime) {
+            return (
+                ($newStartTime >= $existingStartTime && $newStartTime < $existingEndTime) ||
+                ($newEndTime > $existingStartTime && $newEndTime <= $existingEndTime) ||
+                ($newStartTime <= $existingStartTime && $newEndTime >= $existingEndTime)
+            );
+        }
+
+        $overlapFound = false;
+        foreach ($existingStarts as $index => $start) {
+            if (isOverlap($newStartTime, $newEndTime, $start, $existingEnds[$index])) {
+                $overlapFound = true;
+                break;
+            }
+        }
+        
+        if ($overlapFound) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+      
 }

@@ -27,7 +27,7 @@
     {{-- <div>
         <h1>@yield('title')</h1>
     </div> --}}
-    <div>
+    <div id="app">
         {{-- directive yield ini gunanya nanti di isi dengan block directive @section ... @endsection --}}
         @yield('content')
     </div>
