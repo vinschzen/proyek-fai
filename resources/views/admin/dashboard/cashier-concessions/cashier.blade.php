@@ -48,6 +48,9 @@
           </thead>
           <tbody>
             @foreach ($concessions as $concession)
+                @if (isset($concession['deleted_at']))
+                    @continue
+                @endif
                 @if ( $concession['stock']  <= 0 ) @continue @endif
 
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">

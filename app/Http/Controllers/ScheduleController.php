@@ -169,6 +169,48 @@ class ScheduleController extends Controller
         return redirect()->route('toMasterSchedule')->with('success', 'Play added successfully');
     }
 
+    public function edit($id, Request $request)
+    {
+        $rules = [
+            'playid' => 'required|string|max:255',
+            'date' => 'required|string',
+            'time' => 'required|date_format:H:i',
+        ];
+        
+        $messages = [
+            'playid.required' => 'The play selection is required.',
+            'date.required' => 'The date field is required.',
+            'date.date_format' => 'The date format is incorrect.',
+            'time.string' => 'The title must be a string.',
+        ];
+        
+        $request->validate($rules, $messages);
+
+
+        $data = $request->only(['playid', 'date', 'theater']);
+
+        $play = $this->database->getReference("tplays/$request->playid")->getSnapshot()->getValue();
+
+        $data['time_start'] = $request->time;
+        $carbonTime = Carbon::createFromFormat('H:i', $request->time);
+        $newTime = $carbonTime->addMinutes($play['duration']);
+        $newTimeString = $newTime->format('H:i');
+
+        $data['time_end'] = $newTimeString;
+
+        if (!$this->checkOverlap($data['time_start'], $data['time_end'], $data['theater'], $data['date']))
+        {
+            return redirect()->back()->with('error', 'Overlapping schedules');
+        }
+
+        $data['updated_at'] = ['.sv' => 'timestamp'];
+
+        $schedulesRef = $this->database->getReference("tschedules/$id");
+        $schedulesRef->update($data);
+
+        return redirect()->route('toMasterSchedule')->with('success', 'Schedule edited successfully');
+    }
+
     function calculateTimeRange($initialTime, $incrementMinutes) {
         $initialTimestamp = strtotime('1970-01-01 ' . $initialTime);
     
@@ -187,7 +229,12 @@ class ScheduleController extends Controller
         $scheduleRef = $this->database->getReference('tschedules')->getChild($id);
 
         if ($scheduleRef->getSnapshot()->exists()) {
-            $scheduleRef->remove();
+            // $scheduleRef->remove();
+            $scheduleRef->update([
+                'is_deleted' => true,
+                'deleted_at' => time(), 
+            ]);
+
             return redirect()->route('toMasterSchedule')->with('success', 'Schedule deleted successfully');
         }
 

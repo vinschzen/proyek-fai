@@ -286,10 +286,15 @@ class VoucherController extends Controller
 
     public function destroy($id)
     {
-        $playRef = $this->database->getReference('tvouchers')->getChild($id);
+        $voucherRef = $this->database->getReference('tvouchers')->getChild($id);
 
-        if ($playRef->getSnapshot()->exists()) {
-            $playRef->remove();
+        if ($voucherRef->getSnapshot()->exists()) {
+            // $playRef->remove();
+
+            $voucherRef->update([
+                'is_deleted' => true,
+                'deleted_at' => time(), 
+            ]);
             return redirect()->route('toMasterVoucher')->with('success', 'Voucher deleted successfully');
         }
 
