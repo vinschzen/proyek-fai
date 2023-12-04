@@ -64,7 +64,9 @@
                         @csrf
                         @method('DELETE')
                       </form>
-                      <button onclick="confirmDelete('{{ $voucher['id'] }}')" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Delete</button>
+                      <button onclick="confirmDelete('{{ $voucher['id'] }}')" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                     </td>
                 </tr>
             @endforeach
