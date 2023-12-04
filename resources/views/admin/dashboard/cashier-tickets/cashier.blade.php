@@ -41,6 +41,11 @@
           </thead>
           <tbody>
             @foreach ($schedules as $schedule)
+                @if (isset($schedule['deleted_at']))
+                    @continue
+                @endif
+                @if ( $schedule['date']  <= date("Y-m-d") ) @continue @endif
+
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                     <td class="p-3 border-b text-left">{{ $schedule['title'] }}</td>
@@ -48,8 +53,14 @@
                     <td class="p-3 border-b text-left">{{ $schedule['date'] }}</td>
                     <td class="p-3 border-b text-left">{{ $schedule['time_start'] . '-' . $schedule['time_end']}}</td>
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('checkoutTickets', $schedule['id']) }}" class="bg-green-500 text-white p-2 rounded hover:bg-green-700">Tickets</a>
+                      @if ( $schedule['date']  <= date("Y-m-d") )
+                        <p class="text-red-500">OUT</p>
+                      @else
+                        <a href="{{ route('checkoutTickets', $schedule['id']) }}" class="bg-green-500 text-white p-2 rounded hover:bg-green-700">Tickets</a>
+                      @endif
                     </td>
+
+
                 </tr>
             @endforeach
           </tbody>

@@ -132,7 +132,7 @@ class CashierController extends Controller
         return view('admin/dashboard/cashier-tickets/checkout', compact('tables','play', 'schedule', 'seatings'));
     }
 
-    function buytickets($scheduleid, Request $request)
+    function userbuytickets($scheduleid, Request $request)
     {
         $rules = [
             'seats' => 'array|min:1',
@@ -154,7 +154,7 @@ class CashierController extends Controller
 
         $request->validate($rules, $messages);
 
-        $discount = 1;
+        $discount = 0;
 
         if ($request->voucher) {
             $vouchersRef = $this->database->getReference('tvouchers');
@@ -197,8 +197,119 @@ class CashierController extends Controller
             $data['voucher'] = $voucherArray;
         }
         
-        $total = $request->total - ($request->total * $discount);
+        $total = (int) $request->total - ((int) $request->total * $discount);
+
+        $data['total'] = $total;
+
+        if ($request->anonymous) 
+        {
+            $data['specific_user'] = 'Anonymous';
+        }
+        else {
+            $potongSaldo = $this->potongSaldo($request->specific_user, $total);
+            if (!$potongSaldo) return redirect()->back()->with('msg', 'Saldo tidak cukup');
+            $data['specific_user'] = $request->specific_user;
+        }
+      
+
+        $data['schedule_id'] = $scheduleid;
+        $data['created_at'] = ['.sv' => 'timestamp'];
+        $data['updated_at'] = ['.sv' => 'timestamp'];
+
+        $hticketsRef = $this->database->getReference('htickets')->push();
+        $hticketsRef->set($data);
+
+        $hseatingsRef = $this->database->getReference('hseatings');
+        $query = $hseatingsRef->orderByChild('schedule_id')->equalTo($scheduleid);
+        $hseatings = $query->getValue();
+
+        foreach ($request->seats as $key => $value) {
+            if ($value)
+            {
+                $dtickets['htickets'] = $hticketsRef->getKey();;
+                $dtickets['seat'] = $value;
+                $dticketsRef = $this->database->getReference('dtickets')->push();
+                $dticketsRef->set($dtickets);
+
+                $dseatings['hseatings'] = array_keys($hseatings)[0];
+                $dseatings['seat'] = $value;
+                $dseatingsRef = $this->database->getReference('dseatings')->push();
+                $dseatingsRef->set($dseatings);
+            }
+        }
+
+        $this->refreshLoggedIn($request);
+
+        return redirect()->route('toTicket', $hticketsRef->getKey());
+    }
+
+    function buytickets($scheduleid, Request $request)
+    {
+        $rules = [
+            'seats' => 'array|min:1',
+            'seats.*' => 'nullable|string|max:255',
+            'total' => 'required|int'
+        ];
+
+        if (!$request->anonymous) 
+        {
+            $rules['specific_user'] = 'required|string|max:255';
+        }
+
+        $messages = [
+            'specific_user.required' => 'The specific user field is required.',
+            'total.required' => 'At least one seat must be selected !',
+            'seats.array' => 'The seats must be in an array.',
+        ];
+
+
+        $request->validate($rules, $messages);
+
+        $discount = 0;
+
+        if ($request->voucher) {
+            $vouchersRef = $this->database->getReference('tvouchers');
+            $query = $vouchersRef->orderByChild('name')->equalTo($request->voucher);
+            $voucher = $query->getValue();
+
+            foreach ($voucher as $key => $item) {
+                $voucherArray = array_merge(['id' => ltrim($key, '-')], $item);
+            }
+
+            if (!$voucher) {
+                return redirect()->back()->with('error', 'Voucher incorrect');
+            }
+
+            if ($voucherArray["type"] !== "Ticket")
+            {
+                return redirect()->back()->with('error', 'Voucher type invalid');
+            }
+
+
+            $currentDate = date("Y-m-d");
+            if (strtotime($voucherArray['validity_from']) <= strtotime($currentDate) && strtotime($currentDate) <= strtotime($voucherArray['validity_until']) ) {
+
+            } 
+            else {
+                return redirect()->back()->with('error', 'Voucher has expired');
+    
+            }
+
+            
+            $seats = ((int) $request->total) / 5000;
+            
+            if ($voucherArray['ticket_amount'] < $seats)
+            {
+                return redirect()->back()->with('error', 'Voucher conditions not met');
+            }
+            
+            
+            $discount = $voucherArray['discount'] / 100;
+            $data['voucher'] = $voucherArray;
+        }
         
+        $total = (int) $request->total - ((int) $request->total * $discount);
+
         $data['total'] = $total;
 
         if ($request->anonymous) 

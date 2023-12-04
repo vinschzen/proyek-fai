@@ -51,6 +51,9 @@
           </thead>
           <tbody>
             @foreach ($plays as $play)
+                @if (isset($play['deleted_at']))
+                    @continue
+                @endif
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                       <td class="p-3 border-b text-left">
@@ -89,7 +92,7 @@
             <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700" onclick="closeModal()">Close</button>
         </div>
     </div>
-</div>
+  </div>
 </div>
 
 </body>
