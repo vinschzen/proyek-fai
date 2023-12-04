@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Contract\Auth;
 use Midtrans\Config;
 use Midtrans\Snap;
@@ -56,7 +57,7 @@ class PaymentController extends Controller
     {
         $notification = new Notification();
         $isValidSignature = $notification->isValidSignature();
-        \Log::info('Midtrans Notification:', $request->all());
+        Log::info('Midtrans Notification:', $request->all());
 
         if ($isValidSignature) {
             $transactionStatus = $notification->transaction_status;
@@ -88,7 +89,7 @@ class PaymentController extends Controller
 
             return response('OK', 200);
         } else {
-            \Log::error('Invalid Midtrans Notification Signature');
+            Log::error('Invalid Midtrans Notification Signature');
 
             return response('Bad Request', 400);
         }
