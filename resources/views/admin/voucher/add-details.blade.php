@@ -205,7 +205,7 @@
       suggestionsList.innerHTML = '';
 
       const filteredSuggestions = @json($tables).filter(title =>
-          title['title'].toLowerCase().includes(query.toLowerCase())
+          title['title'].toLowerCase().includes(query.toLowerCase()) && !title['deleted_at']
       ).slice(0, 5);
 
       filteredSuggestions.forEach(title => {

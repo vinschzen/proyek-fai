@@ -43,7 +43,7 @@ class PaymentController extends Controller
                 'gross_amount' => $request->amount,
             ),
             'custom_data' => array(
-                'user_id' => $loggedIn->uid
+                'user_id' => $request->session()->get('user')->uid
             )
         );
 

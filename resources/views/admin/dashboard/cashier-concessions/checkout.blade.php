@@ -208,7 +208,7 @@
       suggestionsList.innerHTML = '';
 
       const filteredSuggestions = @json($tables).filter(username =>
-        username['displayName'].toLowerCase().includes(query.toLowerCase())
+        username['displayName'].toLowerCase().includes(query.toLowerCase()) 
       ).slice(0, 5);
 
       filteredSuggestions.forEach(username => {

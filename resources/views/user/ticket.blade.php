@@ -6,14 +6,13 @@
 <body class="font-sans bg-gray-100">
 
   <div class="flex">
-    @include('layout.admin-side')
     <div class="flex-1">
       
       <div class="container mx-auto p-8">
 
         <ol class="list-none p-0 inline-flex">
           <li class="flex items-center">
-            <a href="{{ route('viewtickets') }}" class="text-blue-500">History Tickets</a>
+            <a href="{{ route('toProfile') }}" class="text-blue-500">Profile</a>
             <span class="mx-2">/</span>
           </li>
           <li class="flex items-center">
