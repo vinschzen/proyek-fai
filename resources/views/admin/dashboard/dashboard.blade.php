@@ -16,25 +16,34 @@
       <div class="container mx-auto p-8">
         <h1 class="text-4xl mb-4">Welcome, Admin</h1>
 
+        <form method="GET" class="m-5">
+          From :
+          <input type="date" class="p-2 border border-gray-300 rounded" name="date-from" value="{{ request('date-from') }}">
+          To :
+          <input type="date" class="p-2 border border-gray-300 rounded" name="date-until" value="{{ request('date-until') }}">
+
+          <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
+        </form>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="bg-white p-4 rounded-md shadow-md">
-            <h2 class="text-lg font-semibold mb-2">Total Users</h2>
-            <p class="text-2xl font-bold">1500</p>
+            <h2 class="text-lg font-semibold mb-2 cursor-default ">Total Users</h2>
+            <p class="text-2xl font-bold cursor-default transition duration-300 ease-in-ease-out hover:text-blue-400">5</p>
           </div>
 
           <div class="bg-white p-4 rounded-md shadow-md">
-            <h2 class="text-lg font-semibold mb-2">Total Orders</h2>
-            <p class="text-2xl font-bold">1200</p>
+            <h2 class="text-lg font-semibold mb-2 cursor-default ">Total Orders</h2>
+            <p class="text-2xl font-bold cursor-default transition duration-300 ease-in-ease-out hover:text-blue-400">30</p>
           </div>
 
           <div class="bg-white p-4 rounded-md shadow-md">
-            <h2 class="text-lg font-semibold mb-2">Revenue</h2>
-            <p class="text-2xl font-bold">$50,000</p>
+            <h2 class="text-lg font-semibold mb-2 cursor-default">Revenue</h2>
+            <p class="text-2xl font-bold cursor-default transition duration-300 ease-in-ease-out hover:text-blue-400">Rp. 300.000</p>
           </div>
 
           <div class="bg-white p-4 rounded-md shadow-md">
-            <h2 class="text-lg font-semibold mb-2">Average Order Value</h2>
-            <p class="text-2xl font-bold">$42.00</p>
+            <h2 class="text-lg font-semibold mb-2 cursor-default ">Average Order Value</h2>
+            <p class="text-2xl font-bold cursor-default transition duration-300 ease-in-ease-out hover:text-blue-400" >Rp. 25.000</p>
           </div>
 
         </div>
@@ -55,12 +64,6 @@
         <button onclick="printPage()" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-800 mt-4">Print Page</button>
 
       </div>
-
-            <div class="container mx-auto p-8">
-                <h1 class="text-4xl mb-4">Welcome, Admin</h1>
-            </div>
-
-        </div>
     </div>
 
   <script>

@@ -29,6 +29,7 @@ Route::get('/', function () {
 Route::post('/login', [FirebaseAuthController::class, 'login'])->name('login');
 Route::post('/register', [FirebaseAuthController::class, 'register'])->name('register');
 Route::post('/logout', [FirebaseAuthController::class, 'logout'])->name('logout');
+Route::get('/confirm/{token}', [FirebaseAuthController::class, 'confirm'])->name('confirm.email');
 
 Route::middleware(['not_logged'])->group(function () {
     Route::get('/login', [PageController::class, 'toLogin'])->name('toLogin');
