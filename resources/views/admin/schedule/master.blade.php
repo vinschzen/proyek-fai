@@ -31,8 +31,8 @@
               </select>
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
-        
-        
+
+
             <a href="{{ route('toAddSchedule') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add Schedule</a>
         </div>
 
@@ -60,19 +60,23 @@
                     <td class="p-3 border-b text-left" @if ( $schedule['date']  <= date("Y-m-d") && $schedule["time_end"] <= date("h:i") ) text-red-500 @endif >{{ $schedule['time_start'] . '-' . $schedule['time_end']}}</td>
 
                     <td class="p-3 border-b text-left">
-                      <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Edit</a>
+                      <a href="{{ route('toEditSchedule', $schedule['id']) }}" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700" style="margin-right: 10px">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
                       <form id="deleteForm_{{ $schedule['id'] }}" action="{{ route('schedule.destroy', $schedule['id']) }}" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
                       </form>
-                      <button onclick="confirmDelete('{{ $schedule['id'] }}')" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Delete</button>
+                      <button onclick="confirmDelete('{{ $schedule['id'] }}')" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                     </td>
                 </tr>
             @endforeach
           </tbody>
         </table>
 
-        {{ $schedules->links() }} 
+        {{ $schedules->links() }}
 
       </div>
     </div>

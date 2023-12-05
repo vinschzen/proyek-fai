@@ -12,7 +12,7 @@
   <div class="flex">
     @include('layout.admin-side')
     <div class="">
-      
+
       <div class="container mx-auto p-8">
 
         <ol class="list-none p-0 inline-flex">
@@ -27,7 +27,7 @@
 
         <h2 class="text-3xl font-semibold">Theater Details</h2>
           <p class="text-xl font-semibold">{{$play['title']}} {{" - Theater " . $schedule['theater']}}</p>
-          <p class="text-gray-600 mb-4"> {{ $schedule['date'] }}   {{ $schedule['time_start'] . ' - ' . $schedule['time_end'] }}</p> 
+          <p class="text-gray-600 mb-4"> {{ $schedule['date'] }}   {{ $schedule['time_start'] . ' - ' . $schedule['time_end'] }}</p>
 
         <form action="{{ route('cashier.buytickets', $schedule['id']) }}" method="POST">
         <div class="grid grid-cols-2 gap-10">
@@ -39,7 +39,7 @@
                   @foreach($seats as $seat)
                       @for ($i = 1; $i < 11; $i++)
                           @if (collect($seatings)->pluck('seat')->contains($seat . $i))
-                            <div class="bg-red-200 p-2 rounded cursor-pointer w-10 h-10 hover:bg-red-300">
+                            <div class="bg-red-200 p-2 rounded cursor-not-allowed w-10 h-10 hover:bg-red-300">
                               <p class="text-center text-gray-700">{{ $seat . $i }}</p>
                             </div>
                           @else
@@ -48,7 +48,7 @@
                                 <input type="hidden" value name="seats[]">
                             </div>
                           @endif
-                        
+
                         @if ($i == 3 || $i == 7)
                           <div width="100px"></div>
                         @endif
@@ -57,11 +57,11 @@
               </div>
 
             </div>
-  
+
 
             <div>
               <div class="bg-white p-4 rounded-lg shadow-md">
-                
+
                 @csrf
                 <h2 class="text-2xl font-semibold mb-8">User </h2>
                 <div class="mb-4">
@@ -78,7 +78,7 @@
                       <input type="hidden" name="specific_user" id="play-id" value="{{ old('specific_user') }}">
                       <div id="suggestions" class="absolute bg-white mt-1 w-full rounded-md shadow-lg" style="display: none">
                         <ul class="border border-gray-300 max-h-40 overflow-y-auto">
-                              @foreach($tables as $user) 
+                              @foreach($tables as $user)
                                   <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $user['displayName'] }} , {{ $user['uid']}}')">{{ $user['displayName'] }}</li>
                               @endforeach
                           </ul>
@@ -101,11 +101,11 @@
                       @if (Session::get('error'))
                       <p class="text-red-500 text-xs italic">{{ Session::get('error') }}</p>
                       @endif
-                        
-                    </div>  
+
+                    </div>
                 </div>
                 </div>
-    
+
                 <div class="mb-4">
                   <div class="border p-4 rounded-md">
                       <label class="block text-gray-700 text-sm font-bold mb-2">Details :</label>
@@ -122,19 +122,19 @@
                           @error('seats')
                               <p class="text-red-500 text-xs italic">{{ $message }}</p>
                           @enderror
-                      </div>  
+                      </div>
                   </div>
                 </div>
-                
+
                   <div class="text-center">
                     <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700">Order </button>
                   </div>
                 </form>
-              
+
               </div>
 
           </div>
-        </div>  
+        </div>
 
 
     </div>
