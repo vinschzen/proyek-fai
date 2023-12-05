@@ -61,7 +61,7 @@
         </div>
 
 
-        <button onclick="printPage()" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-800 mt-4">Print Page</button>
+        <button onclick="printPage()" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-800 mt-4"><i class="fa-solid fa-print"></i> Print</button>
 
       </div>
     </div>
