@@ -14,7 +14,11 @@
     <div class="flex-1">
 
       <div class="container mx-auto p-8">
+        @if (Session::get('user')->customClaims['role'] > 1)
         <h1 class="text-4xl mb-4">Welcome, Admin</h1>
+        @else
+        <h1 class="text-4xl mb-4">Welcome, Staff</h1>
+        @endif
 
         <form method="GET" class="m-5">
           From :
