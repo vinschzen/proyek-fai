@@ -29,7 +29,7 @@
                 <option value="newest" @if(request('filter') === 'newest') selected @endif>Newest</option>
                 <option value="oldest" @if(request('filter') === 'oldest') selected @endif>Oldest</option>
               </select>
-              <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
+              <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>  
           </form>
         
         </div>
@@ -64,10 +64,10 @@
                       <td class="p-3 border-b text-left">
                         <input type="number" name="amount_to_add" class="p-2 border rounded focus:outline-none focus:border-blue-500" value="1">
                       </td>
-                      <td class="p-3 border-b text-left">
-                        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700">Add to Cart</button>
-                      </td>
-                    </form>
+                      <td class="p-3 border-b text-left"> 
+                        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"><i class="fa-solid fa-cart-plus"></i></button>
+                      </td> 
+                    </form> 
                   </tr>
                   @endforeach
           </tbody>
