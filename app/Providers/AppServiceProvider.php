@@ -22,5 +22,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Blade::directive('rupiah', function ( $expression ) { return "Rp. <?php echo number_format($expression,0,',','.'); ?>"; });
+
+        if (app()->environment('remote')) {
+            URL::forceScheme('https');
+        }
     }
 }

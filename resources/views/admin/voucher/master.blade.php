@@ -32,7 +32,6 @@
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
 
-
             <a href="{{ route('toAddVoucher') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Add Voucher</a>
         </div>
 

@@ -26,12 +26,16 @@
                                         <span>Admin</span>
                                         @break
                         @endswitch
-                        </p>
+                      </p>
                     </div>
-                    <div class="mt-6">
-                        <h2 class="text-lg font-semibold mb-2">About Me</h2>
+                    <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700"><a href="{{ route('toPassword') }}">Change Password</a></button>
+                    @if (Session::has('msg'))
+                        <span class="text-green-300">{{Session::get('msg')}}</span>
+                    @endif
+                    <div class="mt-6 align-items: flex-end;">
+                        <h2 class="text-lg font-semibold mb-2">Change Password</h2>
                         <p class="text-gray-700">Write a brief description about yourself.</p>
-                    </div>
+                      </div>
                     <div class="mt-6">
                         <h2 class="text-lg font-semibold mb-2">Information</h2>
                         <p class="text-gray-700">Email: {{ Session::get('user')->email }}</p>

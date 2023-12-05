@@ -46,9 +46,7 @@ class FirebaseAuthController extends Controller
             $confirmationsRef = $this->database->getReference('tconfirmations')->push();
             $confirmationsRef->set($user);
 
-      
-            Mail::to($request->input('email'))->send(new ConfirmationMail($user));
-    
+            Mail::to($request->input('email'))->send(new ConfirmationMail($user));    
             
             return back()->with('msg', 'Confirmation email has been sent');
         } catch (FirebaseEmailExistsException $e) {
