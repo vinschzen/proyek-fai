@@ -36,8 +36,6 @@ class PageController extends Controller
                 ->equalTo($playId)
                 ->getValue();
             
-            
-
             if (!empty($result)) {
                 $result[$playId]['id'] = $playId;
                 $plays = array_merge($plays, $result);
@@ -45,6 +43,10 @@ class PageController extends Controller
         }
 
         return view('user/home', compact('plays'));
+    }
+
+    public function toPassword() {
+        return view('user/password');
     }
 
     public function playDetails($id) {
@@ -308,9 +310,8 @@ class PageController extends Controller
     }
 
     public function viewtickets(Request $request) {
-        $hticketsSnapshot = $this->database->getReference('htickets')->getSnapshot();
+        $hticketsSnapshot = $this->database->getReference('htickets');
         $htickets = [];
-        
         $hticketsData = $hticketsSnapshot->getValue();
 
         if (is_array($hticketsData)) {
@@ -338,6 +339,7 @@ class PageController extends Controller
                 $hticketData['age_rating'] = $playsData['age_rating'];
 
                 $htickets[] = array_merge(['id' => $hticketKey], $hticketData);
+
             }
         } else {
             $htickets = [];
@@ -370,10 +372,9 @@ class PageController extends Controller
         if ($filter === 'oldest') {
             $htickets = array_reverse($htickets);
         }
-    
+
         $perPage = 6;
         $currentPage = Paginator::resolveCurrentPage('page');
-
         $currentItems = array_slice($htickets, ($currentPage - 1) * $perPage, $perPage);
 
         $htickets = new LengthAwarePaginator(
@@ -390,7 +391,7 @@ class PageController extends Controller
     public function detailtickets($id) {
         $hticketsSnapshot = $this->database->getReference("htickets/$id")->getSnapshot();
         $hticketData = $hticketsSnapshot->getValue();
-        $hticket = [];
+        $hticket = [];                                                                      
 
         if ($hticketData['specific_user'] != 'Anonymous') 
         {

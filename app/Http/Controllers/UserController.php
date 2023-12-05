@@ -10,6 +10,9 @@ use Kreait\Firebase\Contract\Database;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
+use Kreait\Firebase\Exception\Auth\InvalidPassword as FirebaseInvalidPasswordException;
+
+
 class UserController extends Controller
 {
     protected $auth;
@@ -92,6 +95,38 @@ class UserController extends Controller
         return redirect()->route('toMasterUser')->with('success', 'User toggled');
     }
 
+    public function changepassworduser($id, Request $request)
+    {
+        $rules = [
+            'old_password' => 'required|min:6',
+            'new_password' => 'required|min:6|different:old_password|confirmed',
+        ];
+        
+        $messages = [
+            'old_password.required' => 'The old password field is required.',
+            'old_password.min' => 'Password length must be 6 or more characters.',
+            'new_password.required' => 'The new password field is required.',
+            'new_password.min' => 'Password length must be 6 or more characters.',
+            'new_password.different' => 'New password must be different from the old password.',
+            'new_password.confirmed' => 'Confirmation does not match the new password.',
+        ];
+        $request->validate($rules, $messages);
+
+        try {
+            $signInResult = $this->auth->signInWithEmailAndPassword(
+                $request->session()->get("user")->email,
+                $request->old_password
+            );
+
+        } catch (\Throwable $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
+
+        $updatedUser = $this->auth->changeUserPassword($id, $request->new_password);
+
+        return redirect()->route('toProfile')->with('msg', 'User password changed');
+    }
+
     public function changepassword($id, Request $request)
     {
        
@@ -153,5 +188,57 @@ class UserController extends Controller
         }
         
         return view('admin/users/edit', compact('user'));
+    }
+
+    public function viewadd() 
+    {
+
+        return view('admin/users/add');
+    }
+
+    public function store(Request $request)
+    {
+        try {
+
+            $rules = [
+                'username' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'password' => 'required|min:6',
+            ];
+            $messages = [
+                'username.required' => 'The username field is required.',
+                'username.string' => 'The username must be a string.',
+                'username.max' => 'The username may not be greater than :max characters.',
+                'email.required' => 'The email field is required.',
+                'email.email' => 'Please enter a valid email address.',
+                'email.max' => 'The email may not be greater than :max characters.',
+                'password.required' => 'The password field is required.',
+                'password.min' => 'The password must be at least :min characters.',
+            ];
+
+            $request->validate($rules, $messages);
+
+            $user = $request->only(['email', 'username', 'password']);
+            $userProperties = [
+                'email' => $user['email'],
+                'displayName' => $user['username'],
+                'password' => $user['password'],
+            ];
+
+            $user = $this->auth->createUser($userProperties);
+            $this->auth->setCustomUserClaims($user->uid, ['role' => $request->role, 'saldo' => 0]);
+
+            return redirect()->route('toMasterUser')->with('success', 'User added');
+
+        } catch (FirebaseEmailExistsException $e) {
+            return back()->with(['error' => 'Email address already exists']);
+        } catch (FirebaseInvalidEmailException $e) {
+            return back()->with(['error' => 'Invalid email address']);
+        } catch (FirebaseInvalidPasswordException $e) {
+            return back()->with(['error' => 'Invalid password']);
+        } catch (\Throwable $e) {
+
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }
