@@ -111,12 +111,17 @@ class ConcessionController extends Controller
         
         $request->validate($rules, $messages);
 
-        $image = $request->file('image');
-        $imagePath = $image->store('images', 'public'); 
+        $file = request()->file('image');
+        $filename = 'images/' . $file->getClientOriginalName(); 
+        
+        $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->upload(
+            fopen($file->getPathname(), 'r'),
+            ['name' => $filename]
+        );
 
         $data = $request->only(['name', 'description', 'category', 'stock', 'price']);
 
-        $data['image'] = $imagePath;
+        $data['image'] = $filename;
         $data['created_at'] = ['.sv' => 'timestamp'];
         $data['updated_at'] = ['.sv' => 'timestamp'];
 
@@ -156,9 +161,17 @@ class ConcessionController extends Controller
 
         if ($request->file('image'))
         {
-            $poster = $request->file('image');
-            $posterPath = $poster->store('images', 'public'); 
-            $data['image'] = $posterPath;
+            $file = request()->file('image');
+            $filename = 'images/' . $file->getClientOriginalName(); 
+            
+            $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->upload(
+                fopen($file->getPathname(), 'r'),
+                ['name' => $filename]
+            );
+
+            $data = $request->only(['name', 'description', 'category', 'stock', 'price']);
+
+            $data['image'] = $filename;
         }
 
         $data['updated_at'] = ['.sv' => 'timestamp'];
