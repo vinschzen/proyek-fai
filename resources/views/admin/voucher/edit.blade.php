@@ -88,7 +88,7 @@
                         </thead>
                             @foreach ($voucher["if_bought_data"] as $key => $value)
                                   <tr>
-                                    <td class="py-2 px-4 border-b"><img src="{{ asset('storage/' . $value['image']) }}" alt="{{ $value['name'] }} Image" style="width: 80px"></td>
+                                    <td class="py-2 px-4 border-b"><img src="{{ $value['image'] }}" alt="{{ $value['name'] }} Image" style="width: 80px"></td>
                                     <td class="py-2 px-4 border-b">{{$value['name']}}</td>
                                     <td class="py-2 px-4 border-b">{{$value['category']}}</td>
                                     <td class="py-2 px-4 border-b">{{$value['amount']}}</td>
@@ -108,7 +108,7 @@
                       </thead>
                       @foreach ($voucher["then_get_data"] as $key => $value)
                         <tr>
-                          <td class="py-2 px-4 border-b"><img src="{{ asset('storage/' . $value['image']) }}" alt="{{ $value['name'] }} Image" style="width: 80px"></td>
+                          <td class="py-2 px-4 border-b"><img src="{{ $value['image'] }}" alt="{{ $value['name'] }} Image" style="width: 80px"></td>
                           <td class="py-2 px-4 border-b">{{$value['name']}}</td>
                           <td class="py-2 px-4 border-b">{{$value['category']}}</td>
                           <td class="py-2 px-4 border-b">{{$value['amount']}}</td>

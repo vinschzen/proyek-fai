@@ -57,8 +57,8 @@
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                       <td class="p-3 border-b text-left">
-                        <img src="{{ asset('storage/' . $play['poster']) }}" alt="{{ $play['title'] }} Poster" style="width: 50px"
-                            class="cursor-pointer image-modal-trigger" data-image-url="{{ asset('storage/' . $play['poster']) }}">
+                        <img src="{{  $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 50px"
+                            class="cursor-pointer image-modal-trigger" data-image-url="{{  $play['poster'] }}">
                     </td>
                     <td class="p-3 border-b text-left">{{ $play['title'] }}</td>
                     <td class="p-3 border-b text-left">{{ $play['duration'] }}</td>

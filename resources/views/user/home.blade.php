@@ -36,9 +36,9 @@
         @endif
         <div>
             <a href="{{ route('toPlay', $play['id'] )}}">
-                <img src="{{ asset('storage/' . $play['poster']) }}" alt="{{ $play['title'] }} Poster"
+                <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster"
                     style="width: 200px" class="cursor-pointer image-modal-trigger"
-                    data-image-url="{{ asset('storage/' . $play['poster']) }}">
+                    data-image-url="{{ $play['poster'] }}">
             </a>
             {{$play['title']}}
         </div>

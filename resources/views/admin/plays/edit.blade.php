@@ -27,7 +27,7 @@
             @csrf
             <div class="mb-4">
               <label for="poster" class="block text-gray-700 text-sm font-bold mb-2">Poster:</label>
-              <img src="{{ asset('storage/' . $play['poster']) }}" alt="{{ $play['title'] }} Poster" style="width: 120px">
+              <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 120px">
               <input type="file" name="poster" id="poster" class="w-full p-2 border rounded-md" value="{{ old('poster') }}">
               @error('poster') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
             </div>

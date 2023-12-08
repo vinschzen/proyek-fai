@@ -37,7 +37,7 @@
                 <div class="text-center cursor-pointer bg-gray-0 hover:bg-gray-100">
                     <label for="">{{$concession['name']}} - @rupiah($concession['price']) </label>
 
-                    <div class="object-none object-center p-3 border-b"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="height: 150px"></div>    
+                    <div class="object-none object-center p-3 border-b"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="height: 150px"></div>    
                     
                     <form action="{{ route('addToUsersCart', $concession['id']) }}" method="get">
                         <div class="grid grid-cols-2 p-5">
@@ -66,7 +66,7 @@
                 <div class="text-center cursor-pointer bg-gray-0 hover:bg-gray-100">
                     <label for="">{{$concession['name']}} - @rupiah($concession['price']) </label>
 
-                    <div class="object-none object-center p-3 border-b"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="height: 150px"></div>    
+                    <div class="object-none object-center p-3 border-b"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="height: 150px"></div>    
                     
                     <form action="{{ route('addToUsersCart', $concession['id']) }}" method="get">
                         <div class="grid grid-cols-2 p-5">
@@ -95,7 +95,7 @@
                 <div class="text-center cursor-pointer bg-gray-0 hover:bg-gray-100">
                     <label for="">{{$concession['name']}} - @rupiah($concession['price']) </label>
 
-                    <div class="object-none object-center p-3 border-b"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="height: 150px"></div>    
+                    <div class="object-none object-center p-3 border-b"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="height: 150px"></div>    
                     
                     <form action="{{ route('addToUsersCart', $concession['id']) }}" method="get">
                         <div class="grid grid-cols-2 p-5">

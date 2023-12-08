@@ -26,7 +26,7 @@
                 <div class="bg-white rounded p-4 shadow-md mb-4">
                     <div class="grid grid-cols-7">
                         <div class="col-span-1 p-5">
-                            <img src="{{ asset('storage/' . $play['poster']) }}" alt="{{ $play['title'] }} Poster"
+                            <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster"
                                 class="object-cover mb-4">
                         </div>
                         <div class="col-span-6 p-5">
