@@ -8,16 +8,19 @@ use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Database;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Kreait\Firebase\Contract\Storage;
 
 class PageController extends Controller
 {
     protected $auth;
     protected $database;
+    protected $storage;
 
-    public function __construct(Auth $auth, Database $database)
+    public function __construct(Auth $auth, Database $database, Storage $storage)
     {
         $this->auth = app('firebase.auth');
         $this->database = $database;
+        $this->storage = $storage;
 
     }
 
@@ -38,6 +41,7 @@ class PageController extends Controller
             
             if (!empty($result)) {
                 $result[$playId]['id'] = $playId;
+                $result[$playId]['poster'] =  $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($result[$playId]['poster'])->signedUrl(new \DateTime('tomorrow'));
                 $plays = array_merge($plays, $result);
             }
         }
@@ -51,6 +55,9 @@ class PageController extends Controller
 
     public function playDetails($id) {
         $play = $this->database->getReference("tplays/$id")->getValue();
+        $play['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($play['poster'])->signedUrl(new \DateTime('tomorrow'));
+
+
         $schedules = $this->database->getReference('tschedules')
                 ->orderByChild('playid')
                 ->equalTo($id)
@@ -230,6 +237,7 @@ class PageController extends Controller
         if (is_array($concessionsData)) {
             foreach ($concessionsData as $concessionKey => $concessionData) {
                 $concessions[] = array_merge(['id' => $concessionKey], $concessionData);
+                $concessions['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionData['image'] )->signedUrl(new \DateTime('tomorrow'));
             }
         } else {
             $concessions = [];
@@ -296,7 +304,7 @@ class PageController extends Controller
         $playsSnapshot = $playsReference->getSnapshot();
         $playsData = $playsSnapshot->getValue();
         $hticketData['title'] = $playsData['title'];
-        $hticketData['poster'] = $playsData['poster'];
+        $hticketData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
         $hticketData['description'] = $playsData['description'];
         $hticketData['age_rating'] = $playsData['age_rating'];
 
@@ -334,7 +342,8 @@ class PageController extends Controller
                 $playsSnapshot = $playsReference->getSnapshot();
                 $playsData = $playsSnapshot->getValue();
                 $hticketData['title'] = $playsData['title'];
-                $hticketData['poster'] = $playsData['poster'];
+                $hticketData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
+
                 $hticketData['description'] = $playsData['description'];
                 $hticketData['age_rating'] = $playsData['age_rating'];
 
@@ -413,7 +422,7 @@ class PageController extends Controller
         $playsSnapshot = $playsReference->getSnapshot();
         $playsData = $playsSnapshot->getValue();
         $hticketData['title'] = $playsData['title'];
-        $hticketData['poster'] = $playsData['poster'];
+        $hticketData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
         $hticketData['description'] = $playsData['description'];
         $hticketData['age_rating'] = $playsData['age_rating'];
 
@@ -447,7 +456,7 @@ class PageController extends Controller
                 $playsSnapshot = $playsReference->getSnapshot();
                 $playsData = $playsSnapshot->getValue();
                 $hseatingData['title'] = $playsData['title'];
-                $hseatingData['poster'] = $playsData['poster'];
+                $hseatingData['poster'] =  $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
                 $hseatingData['description'] = $playsData['description'];
                 $hseatingData['age_rating'] = $playsData['age_rating'];
 
@@ -519,7 +528,7 @@ class PageController extends Controller
         $playsSnapshot = $playsReference->getSnapshot();
         $playsData = $playsSnapshot->getValue();
         $hseatingData['title'] = $playsData['title'];
-        $hseatingData['poster'] = $playsData['poster'];
+        $hseatingData['poster'] =  $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
         $hseatingData['description'] = $playsData['description'];
         $hseatingData['age_rating'] = $playsData['age_rating'];
 
@@ -628,29 +637,27 @@ class PageController extends Controller
         $query = $dorderRef->orderByChild('horder')->equalTo($id);
         $dorders = $query->getValue();
 
+        $concession;
+        
         foreach ($dorders as $key => $value) {
             $concessionId = $dorders[$key]['item'];
-            $dorders[$key]['name'] = $this->database->getReference("tconcessions/$concessionId")->getValue()['name'];
-            $dorders[$key]['image'] = $this->database->getReference("tconcessions/$concessionId")->getValue()['image'];
+            $concession = $this->database->getReference("tconcessions/$concessionId")->getValue();
+            $dorders[$key]['name'] = $concession['name'];
+            $dorders[$key]['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($concession['image'])->signedUrl(new \DateTime('tomorrow'));
         }
 
         if (isset($horder['voucher']))
         {
-
             foreach ($horder['voucher']['then_get'] as $key => $value) {
-                // $horder['voucher']['then_get']['name'] = $this->database->getReference("tconcessions/$key")->getValue()['name'];
-                // $horder['voucher']['then_get']['image'] = $this->database->getReference("tconcessions/$key")->getValue()['image'];
                 $array = [
                     'amount'=> $horder['voucher']['then_get'][$key],
-                    'name' => $this->database->getReference("tconcessions/$key")->getValue()['name'],
-                    'image' => $this->database->getReference("tconcessions/$key")->getValue()['image'],
+                    'name' => $concession['name'],
+                    'image' => $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($concession['image'])->signedUrl(new \DateTime('tomorrow')),
                 ];
 
                 $horder['then_get'][] = $array;
             }
         }
-
-        // dd($dorders);
 
         return view('admin/history/concessions/details', compact('horder', 'dorders'));
     }

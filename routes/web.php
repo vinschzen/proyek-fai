@@ -179,6 +179,7 @@ Route::middleware(['user'])->group(function () {
     Route::get('/clearcart', [ConcessionController::class, 'clearUsersCart'])->name('clearUsersCart');
 });
 
+Route::get('/callback', [PaymentController::class, 'callback'])->name('callback');
 
 
 

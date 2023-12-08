@@ -28,7 +28,7 @@
           @csrf
           <div class="mb-4 dropzone" id="dropzone">
             <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image :</label>
-            <img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="width: 200px">
+            <img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 200px">
             <input type="file" name="image" id="image" class="w-full p-2 border rounded-md" value="{{ old('image')}}">
             @error('image') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
           </div>
