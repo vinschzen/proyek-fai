@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
+use Kreait\Firebase\Contract\Storage;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Contract\Database;
@@ -13,10 +14,12 @@ use Illuminate\Pagination\Paginator;
 class ConcessionController extends Controller
 {
     protected $database;
+    protected $storage;
 
-    public function __construct(Database $database)
+    public function __construct(Database $database, Storage $storage)
     {
         $this->database = $database;
+        $this->storage = $storage;
     }
 
     public function index(Request $request)
@@ -25,6 +28,7 @@ class ConcessionController extends Controller
         $concessionsData = $concessionsSnapshot->getValue();
         if (is_array($concessionsData)) {
             foreach ($concessionsData as $concessionKey => $concessionData) {
+                $concessionData['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionData['image'] )->signedUrl(new \DateTime('tomorrow'));
                 $concessions[] = array_merge(['id' => $concessionKey], $concessionData);
             }
         } else {
@@ -71,8 +75,9 @@ class ConcessionController extends Controller
         if (!$concessionSnapshot->exists()) {
             abort(404); 
         }
-    
+
         $concession = array_merge(['id' => $id], $concessionSnapshot->getValue());
+        $concession['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionSnapshot->getValue()['image'] )->signedUrl(new \DateTime('tomorrow'));
     
         return view('admin/concession/edit', compact('concession'));
     }
@@ -106,12 +111,17 @@ class ConcessionController extends Controller
         
         $request->validate($rules, $messages);
 
-        $image = $request->file('image');
-        $imagePath = $image->store('images', 'public'); 
+        $file = request()->file('image');
+        $filename = 'images/' . $file->getClientOriginalName(); 
+        
+        $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->upload(
+            fopen($file->getPathname(), 'r'),
+            ['name' => $filename]
+        );
 
         $data = $request->only(['name', 'description', 'category', 'stock', 'price']);
 
-        $data['image'] = $imagePath;
+        $data['image'] = $filename;
         $data['created_at'] = ['.sv' => 'timestamp'];
         $data['updated_at'] = ['.sv' => 'timestamp'];
 
@@ -151,9 +161,17 @@ class ConcessionController extends Controller
 
         if ($request->file('image'))
         {
-            $poster = $request->file('image');
-            $posterPath = $poster->store('images', 'public'); 
-            $data['image'] = $posterPath;
+            $file = request()->file('image');
+            $filename = 'images/' . $file->getClientOriginalName(); 
+            
+            $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->upload(
+                fopen($file->getPathname(), 'r'),
+                ['name' => $filename]
+            );
+
+            $data = $request->only(['name', 'description', 'category', 'stock', 'price']);
+
+            $data['image'] = $filename;
         }
 
         $data['updated_at'] = ['.sv' => 'timestamp'];
@@ -186,6 +204,7 @@ class ConcessionController extends Controller
         $concessionsData = $concessionsSnapshot->getValue();
         if (is_array($concessionsData)) {
             foreach ($concessionsData as $concessionKey => $concessionData) {
+                $concessionData['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionData['image'] )->signedUrl(new \DateTime('tomorrow'));
                 $concessions[] = array_merge(['id' => $concessionKey], $concessionData);
             }
         } else {
@@ -237,6 +256,7 @@ class ConcessionController extends Controller
         $concessionsSnapshot = $this->database->getReference("tconcessions/$id")->getSnapshot();
         $concessionsData = $concessionsSnapshot->getValue();
         $concessions = array_merge(['id' => $id, 'qty' => $request->amount_to_add], $concessionsData);
+        $concessions['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionsData['image'] )->signedUrl(new \DateTime('tomorrow'));
 
         $cashier[] = $concessions;
         

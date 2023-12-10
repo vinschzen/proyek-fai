@@ -9,15 +9,18 @@ use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Contract\Database;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Kreait\Firebase\Contract\Storage;
 use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
     protected $database;
+    protected $storage;
 
-    public function __construct(Database $database)
+    public function __construct(Database $database, Storage $storage)
     {
         $this->database = $database;
+        $this->storage = $storage;
     }
 
     public function index(Request $request)
@@ -104,6 +107,7 @@ class ScheduleController extends Controller
         $playsData = $playsSnapshot->getValue();
         if (is_array($playsData)) {
             foreach ($playsData as $playKey => $playData) {
+                $playData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playData['poster'])->signedUrl(new \DateTime('tomorrow'));;
                 $plays[] = array_merge(['id' => $playKey], $playData);
             }
         } else {
@@ -249,6 +253,8 @@ class ScheduleController extends Controller
         $existingEnds  = [];
 
         $schedules = $this->database->getReference("tschedules")->getSnapshot()->getValue();
+        if (!$schedules) return true;
+
         foreach ($schedules as $key => $s) {
             if ($s['theater'] == $theater && $s['date'] == $date) {
                 $existingStarts[] = $s['time_start'];

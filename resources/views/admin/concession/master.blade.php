@@ -54,7 +54,7 @@
                 @endif
                 <tr class="hover:bg-gray-100 ">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
-                    <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
+                    <td class="p-3 border-b text-left"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
                     <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['category'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>

@@ -26,7 +26,7 @@
         <div class="bg-white rounded p-4 shadow-md mb-4">
           <div class="grid grid-cols-7">
             <div class="col-span-1 m-5">
-              <img src="{{ asset('storage/' . $hseating['poster']) }}" alt="{{ $hseating['title'] }} Poster" class="object-cover mb-4" width="150px">
+              <img src="{{ $hseating['poster'] }}" alt="{{ $hseating['title'] }} Poster" class="object-cover mb-4" width="150px">
             </div>
             <div class="col-span-6">
               <h3 class="text-2xl font-bold mb-4">{{ $hseating['title'] }}</h3>
