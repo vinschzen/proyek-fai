@@ -342,10 +342,6 @@ class PageController extends Controller
                 $playsSnapshot = $playsReference->getSnapshot();
                 $playsData = $playsSnapshot->getValue();
                 $hticketData['title'] = $playsData['title'];
-                $hticketData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
-
-                $hticketData['description'] = $playsData['description'];
-                $hticketData['age_rating'] = $playsData['age_rating'];
 
                 $htickets[] = array_merge(['id' => $hticketKey], $hticketData);
 
