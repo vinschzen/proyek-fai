@@ -33,6 +33,7 @@ Route::get('/confirm/{token}', [FirebaseAuthController::class, 'confirm'])->name
 
 Route::middleware(['not_logged'])->group(function () {
     Route::get('/login', [PageController::class, 'toLogin'])->name('toLogin');
+    Route::get('/register', [PageController::class, 'toRegister'])->name('toRegister');
 
 });
 

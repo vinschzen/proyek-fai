@@ -150,6 +150,10 @@ class PageController extends Controller
         return view('login');
     }
 
+    public function toRegister() {
+        return view('register');
+    }
+
     public function toProfile(Request $request) {
         $hticketsSnapshot = $this->database->getReference('htickets');
         $htickets = [];
