@@ -29,7 +29,7 @@
             <div class="col-span-2">
               <p class="text-gray-600">{{ $horder['created_at'] }} </p>
               <p class="text-gray-600">Buyer : {{ $horder['specific_user'] }}</p>
-              <p class="text-gray-600 font-semibold">Total : {{ $horder['total'] }}</p>
+              <p class="text-gray-600 font-semibold">Total : @rupiah( $horder['total'] ) </p>
 
               @if (isset($horder['voucher']))
                 <p class="text-gray-600">{{ $horder['voucher']['name'] }} </p>
@@ -71,11 +71,11 @@
             @foreach ($dorders as $concession)
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
-                    <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $concession['image']) }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
+                    <td class="p-3 border-b text-left"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
                     <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
-                    <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
+                    <td class="p-3 border-b text-left"> @rupiah ( $concession['price'] ) </td>
                     <td class="p-3 border-b text-left">{{ $concession['qty'] }}</td>
-                    <td class="p-3 border-b text-left">{{ $concession['price'] * $concession['qty'] }}</td>
+                    <td class="p-3 border-b text-left">@rupiah (  $concession['price'] * $concession['qty'] )</td>
                     @php
                       $total += ($concession['price'] * $concession['qty']);
                     @endphp
@@ -91,7 +91,7 @@
 
                   </td>
                   <td class="p-3 border-b font-bold text-left">
-                    {{$total}}
+                    @rupiah( $total )
                   </td>
                 </tr>
           </tbody>
@@ -116,7 +116,7 @@
                   @endphp
                   <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                       <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
-                      <td class="p-3 border-b text-left"><img src="{{ asset('storage/' . $image) }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
+                      <td class="p-3 border-b text-left"><img src="{{ $image }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
                       <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
                       <td class="p-3 border-b text-left">{{ $concession['amount'] }}</td>
                   </tr>

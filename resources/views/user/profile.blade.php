@@ -11,7 +11,7 @@
         <h1>Profile User</h1>
 =======
         <div class="container mx-auto mt-8 p-4">
-                <div class="bg-white p-8 rounded shadow-md">
+                <div class="bg-white p-8 m-5 rounded shadow-md">
                     <div class="flex items-center justify-center p-5">
                         <svg class="absolute w-20 h-20 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                     </div>
@@ -29,12 +29,16 @@
                                         <span>Admin</span>
                                         @break
                         @endswitch
-                        </p>
+                      </p>
                     </div>
-                    <div class="mt-6">
-                        <h2 class="text-lg font-semibold mb-2">About Me</h2>
+                    <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700"><a href="{{ route('toPassword') }}">Change Password</a></button>
+                    @if (Session::has('msg'))
+                        <span class="text-green-300">{{Session::get('msg')}}</span>
+                    @endif
+                    <div class="mt-6 align-items: flex-end;">
+                        <h2 class="text-lg font-semibold mb-2">Description</h2>
                         <p class="text-gray-700">Write a brief description about yourself.</p>
-                    </div>
+                      </div>
                     <div class="mt-6">
                         <h2 class="text-lg font-semibold mb-2">Information</h2>
                         <p class="text-gray-700">Email: {{ Session::get('user')->email }}</p>

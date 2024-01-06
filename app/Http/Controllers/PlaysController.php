@@ -9,15 +9,20 @@ use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Contract\Database;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Kreait\Firebase\Contract\Storage;
+
+use App\Services\FirebaseService;
 
 class PlaysController extends Controller
 {
     protected $database;
+    protected $storage;
 
-    public function __construct(Database $database)
+    public function __construct(Database $database, Storage $storage)
     {
         $this->database = $database;
-    }
+        $this->storage = $storage;
+    }   
 
     public function index(Request $request)
     {
@@ -25,7 +30,9 @@ class PlaysController extends Controller
         $playsData = $playsSnapshot->getValue();
         if (is_array($playsData)) {
             foreach ($playsData as $playKey => $playData) {
+                $playData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playData['poster'])->signedUrl(new \DateTime('tomorrow'));;
                 $plays[] = array_merge(['id' => $playKey], $playData);
+
             }
         } else {
             $plays = [];
@@ -71,8 +78,11 @@ class PlaysController extends Controller
         if (!$playSnapshot->exists()) {
             abort(404); 
         }
-    
-        $play = array_merge(['id' => $id], $playSnapshot->getValue());
+
+        $playArray = $playSnapshot->getValue();
+        $playArray['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $playSnapshot->getValue()['poster'] )->signedUrl(new \DateTime('tomorrow'));
+        
+        $play = array_merge(['id' => $id], $playArray);
     
         return view('admin/plays/edit', compact('play'));
     }
@@ -102,12 +112,18 @@ class PlaysController extends Controller
         
         $request->validate($rules, $messages);
 
-        $poster = $request->file('poster');
-        $posterPath = $poster->store('posters', 'public'); 
 
+        $file = request()->file('poster');
+        $filename = 'posters/' . $file->getClientOriginalName(); 
+        
+        $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->upload(
+            fopen($file->getPathname(), 'r'),
+            ['name' => $filename]
+        );
+        
         $data = $request->only(['title', 'description', 'duration', 'age_rating', 'director', 'casts']);
 
-        $data['poster'] = $posterPath;
+        $data['poster'] = $filename;
         $data['created_at'] = ['.sv' => 'timestamp'];
         $data['updated_at'] = ['.sv' => 'timestamp'];
 
@@ -144,9 +160,15 @@ class PlaysController extends Controller
 
         if ($request->file('poster'))
         {
-            $poster = $request->file('poster');
-            $posterPath = $poster->store('posters', 'public'); 
-            $data['poster'] = $posterPath;
+            $file = request()->file('poster');
+            $filename = 'posters/' . $file->getClientOriginalName(); 
+            
+            $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->upload(
+                fopen($file->getPathname(), 'r'),
+                ['name' => $filename]
+            );
+
+            $data['poster'] = $filename;
         }
 
         $data['updated_at'] = ['.sv' => 'timestamp'];

@@ -60,7 +60,7 @@
           <form action="{{ route('users.changerole', $user->uid) }}" method="POST" class="flex-1 max-w-lg bg-white p-6 rounded-lg shadow-md">
             @csrf
             <div class="mb-4">
-              <label for="newRole" class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
+              <label for=c"newRole" class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
               <select name="new_role" id="newRole" class="w-full p-2 border rounded-md">
                 <option value='0' @if ($user->customClaims['role'] == 0) selected @endif>User</option>
                 <option value='1' @if ($user->customClaims['role'] == 1) selected @endif>Staff</option>

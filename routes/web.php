@@ -157,15 +157,17 @@ Route::middleware(['user'])->group(function () {
         Route::get('/home', [PageController::class, 'toHome'])->name('toHome');
         Route::get('/play/{id}', [PageController::class, 'playDetails'])->name('toPlay');
         Route::get('/checkout/{id}', [PageController::class, 'toCheckout'])->name('toCheckout');
+        Route::get('/password', [PageController::class, 'toPassword'])->name('toPassword');
         
         Route::post('/userbuytickets/{id}', [CashierController::class, 'userbuytickets'])->name('user.buytickets');
-
+        
         Route::get('/profile', [PageController::class, 'toProfile'])->name('toProfile');
         Route::get('/tickets/{id}', [PageController::class, 'toTicket'])->name('toTicket');
         Route::get('/saldo', [PageController::class, 'toSaldo'])->name('toSaldo');
         Route::get('/concessions', [PageController::class, 'toConcessions'])->name('toConcessions');
-    
+        
         Route::get('/topup/{id}', [FirebaseAuthController::class, 'topup'])->name('topup');
+        Route::get('/userchangepassword/{id}', [UserController::class, 'changepassworduser'])->name('user.resetpassword');
 
         Route::get('/payment', [PaymentController::class, 'payment'])->name('payment');
         Route::post('/notification', [PaymentController::class, 'notification'])->name('handle');
@@ -177,6 +179,7 @@ Route::middleware(['user'])->group(function () {
     Route::get('/clearcart', [ConcessionController::class, 'clearUsersCart'])->name('clearUsersCart');
 });
 
+Route::get('/callback', [PaymentController::class, 'callback'])->name('callback');
 
 
 
