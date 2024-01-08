@@ -14,7 +14,11 @@
     <div class="flex-1">
 
       <div class="container mx-auto p-8">
+        @if (Session::get('user')->customClaims['role'] > 1)
         <h1 class="text-4xl mb-4">Welcome, Admin</h1>
+        @else
+        <h1 class="text-4xl mb-4">Welcome, Staff</h1>
+        @endif
 
         <form method="GET" class="m-5">
           From :
@@ -61,7 +65,7 @@
         </div>
 
 
-        <button onclick="printPage()" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-800 mt-4">Print Page</button>
+        <button onclick="printPage()" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-800 mt-4"><i class="fa-solid fa-print"></i> Print</button>
 
       </div>
     </div>
