@@ -56,6 +56,8 @@
                             Register
                         </button>
                     </div>
+                    <br>
+                    Already Have an Account? <a href="/login" style="color: blue">Login Here!</a>
                 </form>
             </div>
         </div>
