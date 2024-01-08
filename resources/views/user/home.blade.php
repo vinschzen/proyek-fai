@@ -11,13 +11,11 @@
             <div class="container px-4 mx-auto">
                 <div class="max-w-4xl mx-auto text-center">
                     <span class="text-gray-200 font-semibold uppercase tracking-widest">NEW UPCOMING THEATRE</span>
-                    <h2 class="mt-8 mb-6 text-4xl lg:text-5xl font-bold text-gray-100">Lorem ipsum dolor sit amet
-                        consectetur
-                        adipisicing elit.</h2>
+                    <h2 class="mt-8 mb-6 text-4xl lg:text-5xl font-bold text-gray-100">
+                        Welcome to TXT.COM, find your favorite film and watch it now with your family.
+                    </h2>
                     <p class="max-w-3xl mx-auto mb-10 text-lg text-gray-300">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum sit cum iure qui, nostrum at
-                        sapiente
-                        ducimus.
+                        Don't miss your favorite film. Also watch other latest films only at TXT.COM.
                     </p>
                 </div>
             </div>
