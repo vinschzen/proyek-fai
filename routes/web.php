@@ -30,11 +30,12 @@ Route::post('/login', [FirebaseAuthController::class, 'login'])->name('login');
 Route::post('/register', [FirebaseAuthController::class, 'register'])->name('register');
 Route::post('/logout', [FirebaseAuthController::class, 'logout'])->name('logout');
 Route::get('/confirm/{token}', [FirebaseAuthController::class, 'confirm'])->name('confirm.email');
+Route::get('/home', [PageController::class, 'toHome'])->name('toHome');
+
 
 Route::middleware(['not_logged'])->group(function () {
     Route::get('/login', [PageController::class, 'toLogin'])->name('toLogin');
     Route::get('/register', [PageController::class, 'toRegister'])->name('toRegister');
-
 });
 
 
@@ -147,15 +148,12 @@ Route::middleware(['staff'])->group(function () {
                 Route::get('/addtocart/{id}', [ConcessionController::class, 'addToCart'])->name('addToCart');
                 Route::get('/clearcart', [ConcessionController::class, 'clearCart'])->name('clearCart');
             });
-
-            
         });
     });
 });
 
 Route::middleware(['user'])->group(function () {
     Route::group(['prefix' => 'user'], function() {
-        Route::get('/home', [PageController::class, 'toHome'])->name('toHome');
         Route::get('/play/{id}', [PageController::class, 'playDetails'])->name('toPlay');
         Route::get('/checkout/{id}', [PageController::class, 'toCheckout'])->name('toCheckout');
         Route::get('/password', [PageController::class, 'toPassword'])->name('toPassword');
@@ -172,7 +170,6 @@ Route::middleware(['user'])->group(function () {
 
         Route::get('/payment', [PaymentController::class, 'payment'])->name('payment');
         Route::post('/notification', [PaymentController::class, 'notification'])->name('handle');
-    
     });
     
     Route::get('/removefromcart/{id}', [ConcessionController::class, 'removeFromUsersCart'])->name('removeFromUsersCart');

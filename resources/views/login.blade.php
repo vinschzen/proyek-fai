@@ -39,6 +39,8 @@
                                 Login
                             </button>
                         </div>
+                        <br>
+                        Dont Have an Account? <a href="/register" style="color: blue">Register Here!</a>
                     </form>
                 </div>
             </div>
