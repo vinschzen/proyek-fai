@@ -7,9 +7,6 @@
 
 
 <main class="container mx-auto mt-8">
-<<<<<<< HEAD
-        <h1>Profile User</h1>
-=======
         <div class="container mx-auto mt-8 p-4">
                 <div class="bg-white p-8 m-5 rounded shadow-md">
                     <div class="flex items-center justify-center p-5">
@@ -46,7 +43,6 @@
                     <div class="mt-6">
                         <h2 class="text-lg font-semibold mb-2">Tickets</h2>
                     </div>
->>>>>>> c4955442d4d867b4be2f340d3c9b89b98f0f3540
 
                     <div class="grid grid-cols-3 gap-4">
                       @foreach($htickets as $t)
