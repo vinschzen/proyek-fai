@@ -5,11 +5,14 @@
 
 @section('content')
 
-<div class="w-full bg-center bg-cover">
-    <div class="flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-50 py-48">
+
+
+
+<div class="relative w-full h-screen bg-center bg-cover">
+    <div class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
         <div class="text-center">
-            <div class="container px-4 mx-auto">
-                <div class="max-w-4xl mx-auto text-center">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
                     <span class="text-gray-200 font-semibold uppercase tracking-widest">NEW UPCOMING THEATRE</span>
                     <h2 class="mt-8 mb-6 text-4xl lg:text-5xl font-bold text-gray-100">
                         Welcome to TXT.COM, find your favorite film and watch it now with your family.
@@ -22,6 +25,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 <main class="container mx-auto mt-8">
 
