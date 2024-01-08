@@ -12,7 +12,7 @@
   <div class="flex">
     @include('layout.admin-side')
     <div class="">
-      
+
       <div class="container mx-auto p-8">
 
         <ol class="list-none p-0 inline-flex">
@@ -68,7 +68,7 @@
                             <td class="p-3 border-b font-bold text-left">
                               Total :
                             </td>
-        
+
                           </td>
                           <td class="p-3 border-b font-bold text-left">
                             {{$total}}
@@ -77,11 +77,11 @@
                   </tbody>
                 </table>
               </div>
-  
+
 
             <div class="p-10">
               <div class="bg-white p-4 rounded-lg shadow-md">
-                
+
                 @csrf
                 <h2 class="text-2xl font-semibold mb-8">User </h2>
                 <div class="mb-4">
@@ -98,7 +98,7 @@
                       <input type="hidden" name="specific_user" id="play-id" value="{{ old('specific_user') }}">
                       <div id="suggestions" class="absolute bg-white mt-1 w-full rounded-md shadow-lg" style="display: none">
                         <ul class="border border-gray-300 max-h-40 overflow-y-auto">
-                              @foreach($tables as $user) 
+                              @foreach($tables as $user)
                                   <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $user['displayName'] }} , {{ $user['uid']}}')">{{ $user['displayName'] }}</li>
                               @endforeach
                           </ul>
@@ -112,7 +112,7 @@
                         <input type="checkbox" name="anonymous" id="anonymousCheckbox"> Anonymous
                       </label>
                 </div>
-    
+
                 <div class="mb-4">
                   <div class="border p-4 rounded-md">
                       <label class="block text-gray-700 text-sm font-bold mb-2">Voucher :</label>
@@ -121,8 +121,8 @@
                         @if (Session::get('error'))
                         <p class="text-red-500 text-xs italic">{{ Session::get('error') }}</p>
                         @endif
-                          
-                      </div>  
+
+                      </div>
                   </div>
                 </div>
                   <input type="hidden" name="total" value="{{ $total }}">
@@ -130,7 +130,7 @@
                     <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700">Order </button>
                   </div>
                 </form>
-              
+
               </div>
 
           </div>
@@ -208,7 +208,7 @@
       suggestionsList.innerHTML = '';
 
       const filteredSuggestions = @json($tables).filter(username =>
-        username['displayName'].toLowerCase().includes(query.toLowerCase()) 
+        username['displayName'].toLowerCase().includes(query.toLowerCase())
       ).slice(0, 5);
 
       filteredSuggestions.forEach(username => {

@@ -31,7 +31,7 @@
               </select>
               <button class="ml-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-700" type="submit">Apply Filters</button>
           </form>
-        
+
         </div>
 
         <table class="w-full border border-collapse border-gray-300 mb-4">
@@ -73,7 +73,7 @@
           </tbody>
         </table>
 
-        {{ $concessions->links() }} 
+        {{ $concessions->links() }}
 
         <h1 class="text-4xl mb-4">Cart</h1>
 
@@ -129,7 +129,7 @@
               <a href="{{ route('clearCart') }}" class="ml-auto bg-gray-500 text-white p-2 rounded hover:bg-gray-700">Clear</a>
               <a href="{{ route('checkoutConcessions') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Checkout</a>
           </div>
-          
+
         @endif
 
 
