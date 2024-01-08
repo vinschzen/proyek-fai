@@ -15,7 +15,7 @@
                         Welcome to TXT.COM, find your favorite film and watch it now with your family.
                     </h2>
                     <p class="max-w-3xl mx-auto mb-10 text-lg text-gray-300">
-
+                        Don't miss your favorite film. Also watch other latest films only at TXT.COM.
                     </p>
                 </div>
             </div>
