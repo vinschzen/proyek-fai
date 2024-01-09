@@ -129,7 +129,6 @@ class UserController extends Controller
 
     public function changepassword($id, Request $request)
     {
-       
         $rules = [
             'new_password' => 'required|min:6',
         ];
@@ -148,7 +147,6 @@ class UserController extends Controller
 
     public function changeusername($id, Request $request)
     {
-       
         $rules = [
             'username' => 'required',
         ];
