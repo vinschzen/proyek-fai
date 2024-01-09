@@ -49,7 +49,6 @@
         @endforeach
     </div>
     <br>
-
 </main>
 
 @endsection
