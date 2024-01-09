@@ -5,13 +5,27 @@
 
 @section('content')
 
+<style>
+    .container { position:relative; }
+    .container video {
+        position:relative;
+        z-index:0;
+    }
+    .overlay {
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:1;
+    }
+</style>
+<div class="relative w-full h-screen bg-center bg-cover" style="background-image: url('{{ asset('assets/promo.mp4') }}');">
+    <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center py-48">        
+        <video autoplay loop muted class="absolute inset-0 w-full h-full object-cover">
+            <source src="{{ asset('assets/promo.mp4') }}" type="video/mp4">
+        </video>
 
-
-
-<div class="relative w-full h-screen bg-center bg-cover">
-    <div class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div class="text-center">
-            <div class="container mx-auto px-4">
+        <div class="text-center text-white">
+            <div class="container px-4 mx-auto">
                 <div class="max-w-4xl mx-auto">
                     <span class="text-gray-200 font-semibold uppercase tracking-widest">NEW UPCOMING THEATRE</span>
                     <h2 class="mt-8 mb-6 text-4xl lg:text-5xl font-bold text-gray-100">
@@ -25,8 +39,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <main class="container mx-auto mt-8">
@@ -44,11 +56,12 @@
                     style="width: 200px" class="cursor-pointer image-modal-trigger"
                     data-image-url="{{ $play['poster'] }}">
             </a>
-            {{$play['title']}}
+            <p style="padding-left: 2.2vw">{{$play['title']}}</p>
         </div>
         @endforeach
     </div>
     <br>
+
 </main>
 
 @endsection

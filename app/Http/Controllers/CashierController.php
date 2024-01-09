@@ -371,7 +371,7 @@ class CashierController extends Controller
 
         $cart = $request->session()->get('cashier');
 
-        $discount = 1;
+        $discount = 0;
 
         if ($request->voucher) {
             $vouchersRef = $this->database->getReference('tvouchers');
@@ -429,10 +429,11 @@ class CashierController extends Controller
             if (!$potongSaldo) return redirect()->back()->with('msg', 'Saldo tidak cukup');
             $data['specific_user'] = $request->specific_user;
         }
-
+        
         $data['total'] = $total;
         $data['created_at'] = ['.sv' => 'timestamp'];
         $data['updated_at'] = ['.sv' => 'timestamp'];
+
 
         $hordersRef = $this->database->getReference('horder')->push();
         $hordersRef->set($data);
