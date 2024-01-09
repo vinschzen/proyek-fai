@@ -27,7 +27,7 @@
         <h1 class="text-4xl mb-4">Add Voucher</h1>
 
         <div class="grid grid-cols-2 gap-4">
-              <form action="{{ route('voucher.adddetails') }}" method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded-lg shadow-md">
+              <form action="{{ route('voucher.adddetails') }}" method="GET  " enctype="multipart/form-data" class="bg-white p-4 rounded-lg shadow-md">
                 @csrf
                 <div class="mb-4">
                   <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>

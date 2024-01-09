@@ -96,7 +96,7 @@ Route::middleware(['admin'])->group(function () {
         Route::group(['prefix' => 'voucher'], function() {
             Route::get('/master', [VoucherController::class, 'index'])->name('toMasterVoucher');
             Route::post('/add', [VoucherController::class, 'store'])->name('voucher.store');
-            Route::post('/adddetails', [VoucherController::class, 'viewadddetails'])->name('voucher.adddetails');
+            Route::get('/adddetails', [VoucherController::class, 'viewadddetails'])->name('voucher.adddetails');
             Route::delete('/destroy/{id}', [VoucherController::class, 'destroy'])->name('voucher.destroy');
             Route::post('/editing/{id}', [VoucherController::class, 'edit'])->name('voucher.edit');
             

@@ -144,6 +144,7 @@
 
                   </ul>
                   <button class="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-800 float-right" onclick="clearTable('if-bought')" type="button"> Clear</button>
+                  @error('if-bought-id') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
 
                 </div>
   
@@ -153,8 +154,10 @@
 
                   </ul>
                   <button class="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-800 float-right" onclick="clearTable('then-get')" type="button"> Clear</button>
+                  @error('then-get-id') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
 
                 </div>
+
               </div>
 
               <div class="mb-4">
@@ -251,6 +254,7 @@
 
           span.textContent = titleValue + ' ' + amountInput.value + 'x';
       } else {
+          if (idValue.length < 1 ) return;
           const displayLi = document.createElement('li');
           const div = document.createElement('div');
           const span = document.createElement('span');

@@ -214,7 +214,7 @@ class ConcessionController extends Controller
         $search = $request->input('search');
         if ($search) {
             $concessions = array_filter($concessions, function ($concession) use ($search) {
-                return strpos(strtolower($concession['title']), strtolower($search)) !== false;
+                return strpos(strtolower($concession['name']), strtolower($search)) !== false;
             });
         }
 

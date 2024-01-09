@@ -32,6 +32,21 @@ class FirebaseAuthController extends Controller
     public function register(Request $request)
     {
         try {
+            $rules = [
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'password' => 'required|min:6',
+            ];
+            
+            $messages = [
+                'name.required' => 'The name field is required.',
+                'email.required' => 'The email field is required.',
+                'email.email' => 'Please enter a valid email address.',
+                'password.required' => 'The password field is required.',
+                'password.min' => 'The password must be at least 6 characters.',
+            ];
+            
+            $request->validate($rules, $messages);
 
             $cekConfirm = $this->database->getReference('tconfirmations');
             $query = $cekConfirm->orderByChild('email')->equalTo($request->email);
@@ -47,8 +62,9 @@ class FirebaseAuthController extends Controller
             $confirmationsRef->set($user);
 
             Mail::to($request->input('email'))->send(new ConfirmationMail($user));    
-            
+
             return back()->with('msg', 'Confirmation email has been sent');
+
         } catch (FirebaseEmailExistsException $e) {
             return back()->with(['msg' => 'Email address already exists']);
         } catch (FirebaseInvalidEmailException $e) {
@@ -56,7 +72,6 @@ class FirebaseAuthController extends Controller
         } catch (FirebaseInvalidPasswordException $e) {
             return back()->with(['msg' => 'Invalid password']);
         } catch (\Throwable $e) {
-
             return back()->with(['msg' => $e->getMessage()]);
         }
     }

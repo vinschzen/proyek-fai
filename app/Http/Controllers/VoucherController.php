@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
+use Kreait\Firebase\Contract\Storage;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Contract\Database;
@@ -15,10 +16,12 @@ use Illuminate\Pagination\Paginator;
 class VoucherController extends Controller
 {
     protected $database;
+    protected $storage;
 
-    public function __construct(Database $database)
+    public function __construct(Database $database, Storage $storage)
     {
         $this->database = $database;
+        $this->storage = $storage;
     }
 
     public function index(Request $request)
@@ -75,7 +78,7 @@ class VoucherController extends Controller
             
             $rules = [
                 'ticket_amount' => 'required|min:0',
-                'discount' => 'required|numeric|min:0|max:100',
+                'discount' => 'required|numeric|between:0,100',
             ];
             
             $messages = [
@@ -84,8 +87,7 @@ class VoucherController extends Controller
                 'specific_play.required' => 'The specific play is required',
                 'discount.required' => 'discount is required.',
                 'discount.numeric' => 'discount must be a numeric value.',
-                'discount.min' => 'discount can\'t be below 0.',
-                'discount.max' => 'discount can\'t be above 100.',
+                'discount.between' => 'discount must be between 0 and 100.',
             ];
             
             $request->validate($rules, $messages); 
@@ -102,29 +104,25 @@ class VoucherController extends Controller
         }
         else {
             $rules = [
-                'if_bought_id.*' => 'required',
-                'if_bought_amount.*' => 'required',
-                'then_get_id.*' => 'required',
-                'then_get_amount.*' => 'required',
-                'discount' => 'required|numeric|min:0|max:100',
+                'if-bought-id' => 'required|array|min:1',
+                'then-get-id' => 'required|array|min:1',
+                'discount' => 'required|numeric|between:0,100',
             ];
             
             $messages = [
-                'if_bought_id.*.required' => 'At least one "If Bought" product must be selected.',
-                'if_bought_amount.*.required' => 'Amount must be specified for all "If Bought" products.',
-                'then_get_id.*.required' => 'At least one "Then Get" product must be selected.',
-                'then_get_amount.*.required' => 'Amount must be specified for all "Then Get" products.',
+                'if-bought-id.required' => 'At least one "If Bought" product must be selected.',
+                'then-get-id.required' => 'At least one "Then Get" product must be selected.',
                 'discount.required' => 'discount is required.',
-                'discount.numeric' => 'discount must be a numeric value.',
-                'discount.min' => 'discount can\'t be below 0.',
-                'discount.max' => 'discount can\'t be above 100.',
+                'discount.numeric' => 'discount must be a numeric value.',                
+                'discount.between' => 'discount must be between 0 and 100.',
             ];
-            
+
             $request->validate($rules, $messages); 
-            
+
             
             $data = $request->only(['name', 'type', 'validity_from', 'validity_until', 'discount']);
             $ifBought = array_combine($request->input('if-bought-id'), $request->input('if-bought-amount'));
+
             if ($request->input('then-get-id'))
             {
                 $thenGet = array_combine($request->input('then-get-id'), $request->input('then-get-amount'));
@@ -259,7 +257,7 @@ class VoucherController extends Controller
 
                 $voucher['if_bought_data'][] = 
                 [
-                    'image' => $concessionData['image'],
+                    'image' => $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionData['image'] )->signedUrl(new \DateTime('tomorrow')),
                     'name' => $concessionData['name'],
                     'category' => $concessionData['category'],
                     'amount' => $value,
@@ -273,7 +271,7 @@ class VoucherController extends Controller
 
                 $voucher['then_get_data'][] = 
                 [   
-                    'image' => $concessionData['image'],
+                    'image' => $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionData['image'] )->signedUrl(new \DateTime('tomorrow')),
                     'name' => $concessionData['name'],
                     'category' => $concessionData['category'],
                     'amount' => $value,

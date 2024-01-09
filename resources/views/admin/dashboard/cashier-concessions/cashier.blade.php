@@ -58,7 +58,7 @@
                     <td class="p-3 border-b text-left"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
                     <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
                     <td class="p-3 border-b text-left">{{ $concession['category'] }}</td>
-                    <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
+                    <td class="p-3 border-b text-left">@rupiah($concession['price'])</td>
                     <td class="p-3 border-b text-left">{{ $concession['stock'] }}</td>
                     <form action="{{ route('addToCart', $concession['id']) }}" method="get">
                       <td class="p-3 border-b text-left">
@@ -97,9 +97,9 @@
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                     <td class="p-3 border-b text-left"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
                     <td class="p-3 border-b text-left">{{ $concession['name'] }}</td>
-                    <td class="p-3 border-b text-left">{{ $concession['price'] }}</td>
+                    <td class="p-3 border-b text-left">@rupiah($concession['price'])</td>
                     <td class="p-3 border-b text-left">{{ $concession['qty'] }}</td>
-                    <td class="p-3 border-b text-left">{{ $concession['price'] * $concession['qty'] }}</td>
+                    <td class="p-3 border-b text-left">@rupiah($concession['price'] * $concession['qty'] )</td>
                     <td class="p-3 border-b text-left">
                       <a href="{{ route('removeFromCart', $concession['id']) }}" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Remove</a>
                     </td>
@@ -118,7 +118,7 @@
 
                   </td>
                   <td class="p-3 border-b font-bold text-left">
-                    {{$total}}
+                    @rupiah($total)
                   </td>
                 </tr>
           </tbody>
