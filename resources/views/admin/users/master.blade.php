@@ -10,14 +10,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Z8UJWW3oHlbNLHRg4BqGbObdqt1N4aZRz38+NFRBdNCqEIlFJI7BPFUmVfnH5dP0" crossorigin="anonymous">
 
 
-
 <body class="font-sans bg-gray-100">
   <div class="flex">
     @include('layout.admin-side')
     <div class="flex-1">
       <div class="container mx-auto p-8">
         <h1 class="text-4xl mb-4">Master User</h1>
-
 
         @if(Session::has('success'))
             <div class="alert alert-success">
@@ -84,5 +82,5 @@
 
 </body>
 
-
 @endsection
+

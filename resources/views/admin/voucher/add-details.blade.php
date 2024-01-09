@@ -1,3 +1,4 @@
+
 @extends('layout.main')
 
 @section('title')
@@ -9,7 +10,7 @@
   <div class="flex">
     @include('layout.admin-side')
     <div class="flex-1">
-      
+
       <div class="container mx-auto p-8">
         <nav class="mb-4">
           <ol class="list-none p-0 inline-flex">
@@ -39,7 +40,7 @@
               </div>
           </div>
         </div>
-      
+
         @if ( $vouchers['type'] == 'Ticket')
         <div class="grid grid-cols-2 gap-4">
               <form action="{{ route('voucher.store') }}" method="POST" class="bg-white p-4 rounded-lg shadow-md">
@@ -70,7 +71,7 @@
                           <input type="hidden" name="specific_play" id="play-id" value="{{ old('specific_play') }}">
                           <div id="suggestions" class="absolute bg-white mt-1 w-full rounded-md shadow-lg" style="display: none">
                             <ul class="border border-gray-300 max-h-40 overflow-y-auto">
-                                  @foreach($tables as $title) 
+                                  @foreach($tables as $title)
                                       <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $title['title'] }} , {{ $title['id']}}')">{{ $title['title'] }}</li>
                                   @endforeach
                               </ul>
@@ -81,11 +82,11 @@
                             <input type="checkbox" name="any_play" id="anyPlaysCheckbox"> Any Play
                           </label>
 
-                          
+
                       </div>
                   </div>
                 </div>
-    
+
                 <div class="mb-4">
                   <label for="discount" class="block text-gray-700 text-sm font-bold mb-2">discount %:</label>
                   <input type="number" name="discount" class="w-full p-2 border rounded-md" placeholder="Enter discount %" value="{{ old('discount') }}">
@@ -98,12 +99,12 @@
               </form>
             </div>
           @else
-             
-    
-          
+
+
+
           <div class="bg-white rounded p-4 shadow-md">
             <h3 class="text-xl font-semibold mb-2">Items</h3>
-            
+
             <div class="col-2">
               <label class="block text-gray-700 text-sm font-bold mb-2">Select Concessions : </label>
                           <input
@@ -118,7 +119,7 @@
                           <input type="hidden" name="specific_play" id="play-id" value="{{ old('specific_play') }}">
                           <div id="suggestions" class="absolute bg-white mt-1 w-full rounded-md shadow-lg" style="display: none">
                             <ul class="border border-gray-300 max-h-40 overflow-y-auto">
-                                  @foreach($tables as $title) 
+                                  @foreach($tables as $title)
                                       <li class="cursor-pointer px-4 py-2 hover:bg-gray-100" onclick="selectSuggestion('{{ $title['title'] }} , {{ $title['id']}}')">{{ $title['title'] }}</li>
                                   @endforeach
                               </ul>
@@ -147,7 +148,7 @@
                   @error('if-bought-id') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
 
                 </div>
-  
+
                 <div class="border p-4 rounded-md mb-4">
                   <label for="discount" class="block text-gray-700 text-sm font-bold mb-2">Then Get :</label>
                   <ul id="then-get">

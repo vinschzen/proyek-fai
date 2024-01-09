@@ -14,6 +14,7 @@
     }
 </style>
 
+
 <header class="bg-blue-700 text-white p-4">
 
     <div class="container mx-auto flex justify-between">
@@ -47,6 +48,7 @@
                     </div>
                 </a>
                 @endif
+
                 @else
                 <li><a href="{{ route('toLogin')}}" class="hover:text-white group hover:font-bold">Login</a></li>
                 @endif

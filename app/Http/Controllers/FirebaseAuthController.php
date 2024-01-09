@@ -122,7 +122,7 @@ class FirebaseAuthController extends Controller
             $user = $this->auth->getUser($uid);
             $request->session()->put('user', $user);
 
-            return redirect('user/home')->with(['msg' => 'logged in successfully']);
+            return redirect()->route('toHome')->with(['msg' => 'logged in successfully']);
 
         } catch (FirebaseInvalidEmailException $e) {
             return back()->with(['msg' => 'Invalid email address']);

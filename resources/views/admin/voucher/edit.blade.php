@@ -1,3 +1,4 @@
+
 @extends('layout.main')
 
 @section('title')
@@ -10,7 +11,7 @@
   <div class="flex">
     @include('layout.admin-side')
     <div class="flex-1">
-      
+
       <div class="container mx-auto p-8">
         <nav class="mb-4">
           <ol class="list-none p-0 inline-flex">
@@ -34,7 +35,7 @@
                   <input type="text" name="name"class="w-full p-2 border rounded-md" placeholder="Enter Name" value="{{ old('name') ?? $voucher['name'] }}">
                   @error('name') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
                 </div>
-    
+
                 <div class="mb-4">
                   <label for="type" class="block text-gray-700 text-sm font-bold mb-2">Type :</label>
                   <select name="type" class="w-full p-2 border rounded-md" disabled>
@@ -60,7 +61,7 @@
                       </div>
                   </div>
                 </div>
-    
+
                   <div class="text-center">
                     <button type="submit" class="bg-yellow-500 text-white p-2 rounded-md">Edit Voucher</button>
                   </div>
@@ -122,8 +123,8 @@
                   @endif
                 </div>
               </div>
-             
-    
+
+
 
               </div>
 
