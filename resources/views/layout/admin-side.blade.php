@@ -18,6 +18,7 @@
     <h2 class="text-2xl mb-4"><hr></h2>
     <h2 class="text-2xl mb-4">History</h2>
     <ul>
+        <li><a href="{{ route('toSearchTicket') }}" class="block py-2 transition duration-300 ease-in-out hover:bg-gray-700">Search Ticket</a></li>
         <li><a href="{{ route('viewtickets') }}" class="block py-2 transition duration-300 ease-in-out hover:bg-gray-700">Tickets</a></li>
         <li><a href="{{ route('viewseatings') }}" class="block py-2 transition duration-300 ease-in-out hover:bg-gray-700">Seatings</a></li>
         <li><a href="{{ route('viewconcessions') }}" class="block py-2 transition duration-300 ease-in-out hover:bg-gray-700">Concessions</a></li>

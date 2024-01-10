@@ -132,7 +132,9 @@ Route::middleware(['admin'])->group(function () {
 Route::middleware(['staff'])->group(function () {
     Route::group(['prefix' => 'admin'], function() {
         Route::get('/dashboard', [PageController::class, 'toDashboard'])->name('toDashboard');
-    
+        Route::get('/search-ticket', [PageController::class, 'toSearchTicket'])->name('toSearchTicket');
+
+        Route::get('/searching-ticket', [PageController::class, 'toSearchedTicket'])->name('toSearchedTicket');
         Route::get('/cashier-tickets', [CashierController::class, 'toCashierTickets'])->name('toCashierTickets');
         Route::get('/checkout-tickets/{id}', [CashierController::class, 'checkoutTickets'])->name('checkoutTickets');
         Route::post('/buytickets/{id}', [CashierController::class, 'buytickets'])->name('cashier.buytickets');
