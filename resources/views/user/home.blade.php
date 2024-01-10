@@ -49,7 +49,7 @@
         </video>
 
         <div class="text-center text-white">
-            <div class="container px-4 mx-auto">
+        <div class="container px-4 mx-auto">
                 <div class="max-w-4xl mx-auto">
                     <br> <br>
                     <div class="poster-slide">
