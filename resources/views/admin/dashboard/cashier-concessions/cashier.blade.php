@@ -93,7 +93,8 @@
             @php
               $total = 0;
             @endphp
-            @foreach (Session::get('cashier') ?? [] as $concession)
+  
+            @foreach ($display ?? [] as $concession)
                 <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                     <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                     <td class="p-3 border-b text-left"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
@@ -125,7 +126,8 @@
           </tbody>
         </table>
 
-        @if (Session::get('cashier'))
+        
+        @if ($display)
           <div class="mb-4">
               <a href="{{ route('clearCart') }}" class="ml-auto bg-gray-500 text-white p-2 rounded hover:bg-gray-700">Clear</a>
               <a href="{{ route('checkoutConcessions') }}" class="ml-auto bg-green-500 text-white p-2 rounded hover:bg-green-700">Checkout</a>

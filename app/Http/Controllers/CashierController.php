@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
+use Kreait\Firebase\Contract\Storage;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Contract\Database;
@@ -14,11 +15,13 @@ class CashierController extends Controller
 {
     protected $auth;
     protected $database;
+    protected $storage;
 
-    public function __construct(Auth $auth, Database $database)
+    public function __construct(Auth $auth, Database $database, Storage $storage)
     {
         $this->auth = app('firebase.auth');
         $this->database = $database;
+        $this->storage = $storage;
     }
 
     public function toCashierTickets(Request $request) {
@@ -371,6 +374,17 @@ class CashierController extends Controller
 
         $cart = $request->session()->get('cashier');
 
+        $display = [];
+        foreach ($cart as $key => $value) {
+            $concessionsSnapshot = $this->database->getReference("tconcessions/$key")->getSnapshot();
+            $concessionsData = $concessionsSnapshot->getValue();
+            $item = array_merge(['id' => $key, 'qty' => $value['qty']], $concessionsData);
+            $item['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionsData['image'] )->signedUrl(new \DateTime('tomorrow'));
+            $display[] = $item;
+        }
+
+        $cart = $display;
+
         $discount = 0;
 
         if ($request->voucher) {
@@ -537,7 +551,18 @@ class CashierController extends Controller
 
         $tables = $users;
 
-        return view('admin/dashboard/cashier-concessions/checkout', compact('tables'));
+        $cashier = session('cashier') ?? [];
+
+        $display = [];
+        foreach ($cashier as $key => $value) {
+            $concessionsSnapshot = $this->database->getReference("tconcessions/$key")->getSnapshot();
+            $concessionsData = $concessionsSnapshot->getValue();
+            $cart = array_merge(['id' => $key, 'qty' => $value['qty']], $concessionsData);
+            $cart['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionsData['image'] )->signedUrl(new \DateTime('tomorrow'));
+            $display[] = $cart;
+        }
+
+        return view('admin/dashboard/cashier-concessions/checkout', compact('tables', 'display'));
 
     }
 
