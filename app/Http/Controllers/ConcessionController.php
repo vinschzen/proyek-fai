@@ -235,9 +235,20 @@ class ConcessionController extends Controller
             $currentPage,
             ['path' => Paginator::resolveCurrentPath()]
         );
-    
 
-        return view('admin/dashboard/cashier-concessions/cashier', compact('concessions'));
+        $cashier = $request->session()->get('cashier') ?? [];
+
+        $display = [];
+        foreach ($cashier as $key => $value) {
+            $concessionsSnapshot = $this->database->getReference("tconcessions/$key")->getSnapshot();
+            $concessionsData = $concessionsSnapshot->getValue();
+            $cart = array_merge(['id' => $key, 'qty' => $value['qty']], $concessionsData);
+            $cart['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionsData['image'] )->signedUrl(new \DateTime('tomorrow'));
+            $display[] = $cart;
+        }
+
+
+        return view('admin/dashboard/cashier-concessions/cashier', compact('concessions', 'display'));
     }
 
     public function addToCart($id, Request $request)
@@ -245,20 +256,16 @@ class ConcessionController extends Controller
         $cashier = $request->session()->get('cashier') ?? [];
 
         foreach ($cashier as $key => $value) {
-            if($value['id'] == $id)
+            if($key == $id)
             {
                 $cashier[$key]['qty'] += $request->amount_to_add;
                 $request->session()->put('cashier', $cashier);
+
                 return redirect()->route('toCashierConcessions')->with('success', 'Concession qty added');
             }
         }
 
-        $concessionsSnapshot = $this->database->getReference("tconcessions/$id")->getSnapshot();
-        $concessionsData = $concessionsSnapshot->getValue();
-        $concessions = array_merge(['id' => $id, 'qty' => $request->amount_to_add], $concessionsData);
-        $concessions['image'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object( $concessionsData['image'] )->signedUrl(new \DateTime('tomorrow'));
-
-        $cashier[] = $concessions;
+        $cashier[$id] = [ 'qty' => (int) $request->amount_to_add ];
         
         $request->session()->put('cashier', $cashier);
 
@@ -270,7 +277,7 @@ class ConcessionController extends Controller
         $cashier = $request->session()->get('cashier') ?? [];
 
         foreach ($cashier as $key => $value) {
-            if ($value['id'] == $id)
+            if ($key == $id)
             {
                 unset($cashier[$key]);
             }

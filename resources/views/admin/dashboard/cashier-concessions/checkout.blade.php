@@ -46,7 +46,7 @@
                     @php
                       $total = 0;
                     @endphp
-                    @foreach (Session::get('cashier') ?? [] as $concession)
+                    @foreach ($display ?? [] as $concession)
                         <tr class="hover:bg-gray-100 transition duration-300 ease-in-out hover:bg-gray-200">
                             <td class="p-3 border-b text-left">{{ $loop->iteration }}.</td>
                             <td class="p-3 border-b text-left"><img src="{{ $concession['image'] }}" alt="{{ $concession['name'] }} Image" style="width: 80px"></td>
