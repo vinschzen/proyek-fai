@@ -18,10 +18,10 @@
         z-index:1;
     }
 </style>
-<div class="relative w-full h-screen bg-center bg-cover" style="background-image: url('{{ asset('storage/assets/promo.mp4') }}');">
+<div class="relative w-full h-screen bg-center bg-cover" >
     <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center py-48">        
         <video autoplay loop muted class="absolute inset-0 w-full h-full object-cover">
-            <source src="{{ asset('storage/assets/promo.mp4') }}" type="video/mp4">
+            <source src="https://firebasestorage.googleapis.com/v0/b/proyek-fai-98bc0.appspot.com/o/assets%2Fpromo.mp4?alt=media&token=abeab7fa-8ea8-4d4a-8cb5-7fa18b28f84b" type="video/mp4">
         </video>
 
         <div class="text-center text-white">

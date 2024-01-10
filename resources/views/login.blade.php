@@ -23,7 +23,7 @@
                     <div class="text-center">
                         <img
                         class="mx-auto w-48"
-                        src="{{asset('storage/assets/logo-blue.png')}}"
+                        src="https://firebasestorage.googleapis.com/v0/b/proyek-fai-98bc0.appspot.com/o/assets%2Flogo-blue.png?alt=media&token=758787cc-e82d-4fb7-ae9d-563a88be4f28"
                         alt="logo" />
                         <h4 class="mb-12 mt-12 pb-1 text-xl font-semibold">
                         Welcome to TXT.com
@@ -79,7 +79,7 @@
                 <div
                     class="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-r-lg lg:rounded-bl-none
                     "
-                    style="background-image: url({{ asset('storage/assets/login-poster.png') }});">
+                    style="background-image: url('https://firebasestorage.googleapis.com/v0/b/proyek-fai-98bc0.appspot.com/o/assets%2Flogin-poster.png?alt=media&token=7629ad66-bf2a-496a-b478-c52bf0f8d238');">
                     >
                     <div class="px-4 py-6 text-white md:mx-6 md:p-12" style="z: 10">
                         <h4 class="mb-6 text-2xl font-bold">
