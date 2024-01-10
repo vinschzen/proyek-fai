@@ -51,58 +51,7 @@
         <div class="text-center text-white">
             <div class="container px-4 mx-auto">
                 <div class="max-w-4xl mx-auto">
-                    {{-- <div id="indicators-carousel" class="relative w-full" data-carousel="static">
-                        <!-- Carousel wrapper -->
-                        <div class="relative h-96 overflow-hidden rounded-lg">
-                            @php
-                                $ctr = 0;
-                            @endphp
-                            @foreach ($plays as $play)
-                                @if ($ctr < 5)
-                                    @if (isset($play['deleted_at']))
-                                        @continue
-                                    @endif
-                                    <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
-                                        <a href="{{ route('toPlay', $play['id'] )}}">
-                                            <div class="h-full flex items-center justify-center">
-                                                <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster"
-                                                    class="cursor-pointer image-modal-trigger object-cover h-full w-full" 
-                                                    data-image-url="{{ $play['poster'] }}">
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endif
-                                @php
-                                    $ctr++;
-                                @endphp
-                            @endforeach
-                        </div>
-                        <!-- Slider indicators -->
-                        <div class="absolute z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bottom-5 left-1/2">
-                            <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-                            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-                            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-                            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-                        </div>
-                        <!-- Slider controls -->
-                        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                                </svg>
-                                <span class="sr-only">Previous</span>
-                            </span>
-                        </button>
-                        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                                </svg>
-                                <span class="sr-only">Next</span>
-                            </span>
-                        </button>
-                    </div> --}}
+                    <br> <br>
                     <div class="poster-slide">
                         @php
                             $ctr = 0;
@@ -136,22 +85,26 @@
 
 <main class="container mx-auto mt-8">
 
-    <h1 class="text-3xl font-semibold mb-4">Now Playing</h1>
+    <div class="text-center">
+        <h1 class="text-3xl font-semibold mb-4">Now Playing</h1>
+    </div>
+    <br>
 
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-4 gap-10 justify-center">
         @foreach ($plays as $play)
-        @if (isset($play['deleted_at']))
-        @continue
-        @endif
-        <div>
-            <a href="{{ route('toPlay', $play['id'] )}}">
-                <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 200px"
-                    class="cursor-pointer image-modal-trigger" data-image-url="{{ $play['poster'] }}">
-            </a>
-            <p style="padding-left: 2.2vw">{{$play['title']}}</p>
-        </div>
+            @if (isset($play['deleted_at']))
+                @continue
+            @endif
+            <div class="flex flex-col items-center">
+                <a href="{{ route('toPlay', $play['id'] )}}">
+                    <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 200px"
+                        class="cursor-pointer image-modal-trigger" data-image-url="{{ $play['poster'] }}">
+                </a>
+                <p class="text-center">{{$play['title']}}</p>
+            </div>
         @endforeach
     </div>
+    
     <br>
 
 </main>
