@@ -21,7 +21,7 @@
                 <div
                     class="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-r-lg lg:rounded-bl-none
                     "
-                    style="background-image: url({{ asset('assets/register-poster.png') }});">
+                    style="background-image: url({{ asset('storage/assets/register-poster.png') }});">
                     >
                     <div class="px-4 py-6 text-white md:mx-6 md:p-12" style="z: 10">
                         <h4 class="mb-6 text-2xl font-bold">
@@ -41,7 +41,7 @@
                     <div class="text-center">
                         <img
                         class="mx-auto w-48"
-                        src="{{asset('assets/logo-register.png')}}"
+                        src="{{asset('storage/assets/logo-register.png')}}"
                         alt="logo" />
                         <h4 class="mb-12 mt-12 pb-1 text-xl font-semibold">
                         Register to TXT.com

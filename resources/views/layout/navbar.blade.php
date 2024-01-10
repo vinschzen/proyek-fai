@@ -19,7 +19,7 @@
 
     <div class="container mx-auto flex justify-between">
         <div class="flex items-center">
-            <img src="{{asset('assets/logo-tiket.png')}}" alt="" style="width: 2vw">
+            <img src="{{asset('storage/assets/logo-tiket.png')}}" alt="" style="width: 2vw">
             <h1 class="text-2xl font-semibold" style="padding-left: 2vw">
                 TXT.com
             </h1>
