@@ -46,7 +46,7 @@ class PlaysController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $plays = array_reverse($plays);
         }
     

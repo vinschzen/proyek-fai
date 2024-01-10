@@ -215,7 +215,7 @@ class PageController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $htickets = array_reverse($htickets);
         }
     
@@ -255,7 +255,7 @@ class PageController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $concessions = array_reverse($concessions);
         }
     
@@ -398,7 +398,7 @@ class PageController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $htickets = array_reverse($htickets);
         }
 
@@ -510,7 +510,7 @@ class PageController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $hseatings = array_reverse($hseatings);
         }
     
@@ -616,7 +616,7 @@ class PageController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $horders = array_reverse($horders);
         }
     

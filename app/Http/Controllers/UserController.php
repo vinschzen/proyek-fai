@@ -61,7 +61,7 @@ class UserController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $users = array_reverse($users);
         }
     

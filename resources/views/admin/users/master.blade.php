@@ -63,9 +63,7 @@
                       @if ( $user["status"] == "Disabled")
                         <a href="{{ route('users.toggle', $user['uid']) }}" class="bg-green-500 text-white p-2 rounded hover:bg-green-700">Enable</a>
                       @else
-                        <a href="{{ route('users.toggle', $user['uid']) }}" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
+                        <a href="{{ route('users.toggle', $user['uid']) }}" class="bg-red-500 text-white p-2 rounded hover:bg-red-700">Disable</a>
                       @endif
 
                     </td>
