@@ -43,7 +43,7 @@ class ConcessionController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $concessions = array_reverse($concessions);
         }
     
@@ -219,7 +219,7 @@ class ConcessionController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $concessions = array_reverse($concessions);
         }
     

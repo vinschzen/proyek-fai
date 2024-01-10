@@ -54,7 +54,7 @@ class CashierController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $schedules = array_reverse($schedules);
         }
     

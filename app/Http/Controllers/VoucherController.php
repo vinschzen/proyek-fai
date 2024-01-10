@@ -46,7 +46,7 @@ class VoucherController extends Controller
         }
 
         $filter = $request->input('filter', 'newest');
-        if ($filter === 'oldest') {
+        if ($filter === 'newest') {
             $vouchers = array_reverse($vouchers);
         }
     
