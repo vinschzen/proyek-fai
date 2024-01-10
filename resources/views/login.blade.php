@@ -67,10 +67,6 @@
                         </div>
     
                         <!--Register button-->
-                        <div class="flex items-center justify-between pb-6">
-                        Dont Have an Account? <a href="/register" style="color: blue">Register Here!</a>
-                        </div>
-                        <br>
                         Dont Have an Account? <a href="/register" style="color: blue">Register Here!</a>
                     </form>
                     </div>
