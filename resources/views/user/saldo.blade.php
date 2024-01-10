@@ -11,7 +11,7 @@
     <h1 class="text-3xl font-semibold mb-4">Saldo</h1>
 
     <div class="mb-8">
-        <p class="text-gray-700">Your current account balance is: @rupiah( Session::get('user')->customClaims['saldo'] ) </p>
+        <p class="text-gray-700">Your current account balance is: <b>@rupiah( Session::get('user')->customClaims['saldo'] )</b> </p>
         <small class="text-gray-500">This balance reflects the total amount of funds currently available in your account. Feel free to explore the options below to manage and top up your account.</small>
     </div>
     
@@ -22,7 +22,7 @@
         <form id="topupForm" action="{{ route('payment')}}" method="GET" class="flex items-center">
             @csrf
             <label for="amount" class="mr-4">Amount:</label>
-            <input type="number" name="amount" id="amount" class="border rounded p-2" required> 
+            <input type="number" name="amount" id="amount" class="border rounded p-2" min="0" required> 
             <button type="submit" class="bg-blue-500 text-white rounded p-2 ml-4 hover:bg-blue-800">Top-up</button> 
             @error('amount') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
 
@@ -46,8 +46,8 @@
         <form class="flex flex-wrap gap-3 w-full p-4 m-4">
             <label class="relative w-full flex flex-col">
               <span class="font-bold mb-3">Card number</span>
-
-              <input class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300" type="text" name="card_number" placeholder="0000 0000 0000" style="padding-left: 2vw"/>
+              
+              <input class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300" type="text" name="card_number" placeholder="0000 0000 0000" style="padding-left: 4vw"/>
 
               <svg xmlns="http://www.w3.org/2000/svg" class="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -56,7 +56,7 @@
           
             <label class="relative flex-1 flex flex-col">
               <span class="font-bold mb-3">Expire date</span>
-              <input class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300" type="text" name="expire_date" placeholder="MM/YY" style="padding-left: 2vw"/>
+              <input class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300" type="text" name="expire_date" placeholder="MM/YY" style="padding-left: 4vw"/>
 
 
               <svg xmlns="http://www.w3.org/2000/svg" class="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,7 +74,7 @@
                   </svg>
                 </span>
               </span>
-              <input class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300" type="text" name="card_cvc" placeholder="&bull;&bull;&bull;" style="padding-left: 2vw"/>
+              <input class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300" type="text" name="card_cvc" placeholder="&bull;&bull;&bull;" style="padding-left: 4vw"/>
 
               <svg xmlns="http://www.w3.org/2000/svg" class="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -85,7 +85,7 @@
         <form action="{{ route('topup', Session::get('user')->uid )}}" method="GET" class="flex items-center">
             @csrf
             <label for="amount" class="mr-4">Amount:</label>
-            <input type="number" name="amount" id="amount" class="border rounded p-2" required>
+            <input type="number" name="amount" id="amount" class="border rounded p-2" min="0" required>
             <button type="submit" class="bg-blue-500 text-white rounded p-2 ml-4 hover:bg-blue-800">Top-up</button> 
         </form>
     </div>
