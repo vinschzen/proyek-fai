@@ -284,7 +284,23 @@ class PageController extends Controller
     }
 
     public function toSearchTicket() {
-        return view('admin/dashboard/searchticket');
+        $hticketsSnapshot = $this->database->getReference("htickets")->getSnapshot();
+        $hticketData = $hticketsSnapshot->getValue();
+        $htickets = $hticketData;
+
+        foreach ($htickets as $key => $value) {
+            if ( $value['specific_user'] == 'Anonymous') 
+            {
+                $htickets[$key]['specific_user'] = "Anonymous";
+            }
+            else {
+                $user = $this->auth->getUser($value['specific_user']);
+                $htickets[$key]['specific_user'] = $user->displayName;
+            }
+
+        }
+
+        return view('admin/dashboard/searchticket', compact('htickets'));
     }
 
     public function toTicket($id) {
