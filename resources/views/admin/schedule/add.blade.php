@@ -47,8 +47,12 @@
                     @endforeach
                 </ul>
             </div>
-            @error('play-id') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
+            @error('playid') <p class="text-red-500 text-xs italic">{{ $message }}</p> @enderror
           </div>
+
+          <i class="cursor-pointer text-sm text-red-500" id="clear-input" style="display: none">
+            <a onclick="clearInput()">Clear Input</a>
+          </i>
 
 
           <div class="mb-4">
@@ -110,7 +114,20 @@
     function selectSuggestion(title, id) {
         document.getElementById('play-id').value = id;
         document.getElementById('title').value = title;
+        document.getElementById('title').disabled = true;
         document.getElementById('suggestions').style.display = 'none';
+        document.getElementById('clear-input').style.display = "";
+
+
+    }
+
+    function clearInput() {
+        document.getElementById('play-id').value = "";
+        document.getElementById('title').value = "";
+        document.getElementById('title').disabled = false;
+        document.getElementById('suggestions').style.display = 'none';
+        document.getElementById('clear-input').style.display = "none";
+
 
     }
 

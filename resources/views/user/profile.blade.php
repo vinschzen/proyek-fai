@@ -55,7 +55,7 @@
                               <h3 class="text-xl font-semibold mb-2">{{ $t['title'] }}</h3> <i>{{$t['created_at']}}</i>
                               <p class="text-gray-600">{{ $t['date'] }} : {{ $t['time_start']}} - {{ $t['time_end']}}</p>
                               <p class="text-gray-600">{{ $t['specific_user'] }}</p>
-                              <p class="text-gray-600 font-semibold">Total : {{ $t['total'] }}</p>
+                              <p class="text-gray-600 font-semibold">Total : @rupiah($t['total']) </p>
                             </div>
                           </div>
                         </div>

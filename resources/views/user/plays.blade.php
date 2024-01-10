@@ -4,6 +4,8 @@
 
 @section('content')
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <body class="font-sans bg-gray-100">
 
     <div class="flex">
@@ -27,7 +29,7 @@
                     <div class="grid grid-cols-7">
                         <div class="col-span-1 p-5">
                             <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster"
-                                class="object-cover mb-4">
+                                class="cursor-pointer image-modal-trigger object-cover mb-4" data-image-url="{{  $play['poster'] }}">
                         </div>
                         <div class="col-span-6 p-5">
                             <h2 class="text-3xl font-bold mb-4">{{ $play['title'] }}</h2>
@@ -112,5 +114,48 @@
             </div>
         </div>
 
+        <div id="imageModal" class="fixed inset-0 z-40 flex items-center justify-center hidden">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div class="z-50 mx-auto p-4 bg-white rounded-lg">
+                <img src="" alt="Image Preview" id="modalImage" style="width: 30vw">
+                <div class="mt-4 text-center">
+                    <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+          </div>
+
 </body>
+
+<script>
+    $(document).ready(function() {
+      $('.image-modal-trigger').click(function() {
+          var imageUrl = $(this).attr('data-image-url');
+          $('#modalImage').attr('src', imageUrl);
+          $('#imageModal').removeClass('hidden');
+      });
+  });
+
+  function closeModal() {
+      $('#imageModal').addClass('hidden');
+  }
+
+function confirmDelete(playId) {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('deleteForm_' + playId).submit();
+            }
+        });
+
+}
+</script>
+
 @endsection

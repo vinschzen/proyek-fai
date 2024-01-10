@@ -29,14 +29,27 @@
 .poster-slide img:hover {
   width: calc(35%)
 }
+
+    .container { position:relative; }
+    .container video {
+        position:relative;
+        z-index:0;
+    }
+    .overlay {
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:1;
+    }
 </style>
+<div class="relative w-full h-screen bg-center bg-cover" >
+    <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center py-48">        
+        <video autoplay loop muted class="absolute inset-0 w-full h-full object-cover">
+            <source src="https://firebasestorage.googleapis.com/v0/b/proyek-fai-98bc0.appspot.com/o/assets%2Fpromo.mp4?alt=media&token=abeab7fa-8ea8-4d4a-8cb5-7fa18b28f84b" type="video/mp4">
+        </video>
 
-
-
-<div class="relative w-full h-screen bg-center bg-cover">
-    <div class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div class="text-center">
-            <div class="container mx-auto px-4">
+        <div class="text-center text-white">
+            <div class="container px-4 mx-auto">
                 <div class="max-w-4xl mx-auto">
                     {{-- <div id="indicators-carousel" class="relative w-full" data-carousel="static">
                         <!-- Carousel wrapper -->
@@ -135,11 +148,12 @@
                 <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 200px"
                     class="cursor-pointer image-modal-trigger" data-image-url="{{ $play['poster'] }}">
             </a>
-            {{$play['title']}}
+            <p style="padding-left: 2.2vw">{{$play['title']}}</p>
         </div>
         @endforeach
     </div>
     <br>
+
 </main>
 
 <script>

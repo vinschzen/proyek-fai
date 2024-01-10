@@ -97,7 +97,7 @@ Route::middleware(['admin'])->group(function () {
         Route::group(['prefix' => 'voucher'], function() {
             Route::get('/master', [VoucherController::class, 'index'])->name('toMasterVoucher');
             Route::post('/add', [VoucherController::class, 'store'])->name('voucher.store');
-            Route::post('/adddetails', [VoucherController::class, 'viewadddetails'])->name('voucher.adddetails');
+            Route::get('/adddetails', [VoucherController::class, 'viewadddetails'])->name('voucher.adddetails');
             Route::delete('/destroy/{id}', [VoucherController::class, 'destroy'])->name('voucher.destroy');
             Route::post('/editing/{id}', [VoucherController::class, 'edit'])->name('voucher.edit');
             
@@ -132,7 +132,9 @@ Route::middleware(['admin'])->group(function () {
 Route::middleware(['staff'])->group(function () {
     Route::group(['prefix' => 'admin'], function() {
         Route::get('/dashboard', [PageController::class, 'toDashboard'])->name('toDashboard');
-    
+        Route::get('/search-ticket', [PageController::class, 'toSearchTicket'])->name('toSearchTicket');
+
+        Route::get('/searching-ticket', [PageController::class, 'toSearchedTicket'])->name('toSearchedTicket');
         Route::get('/cashier-tickets', [CashierController::class, 'toCashierTickets'])->name('toCashierTickets');
         Route::get('/checkout-tickets/{id}', [CashierController::class, 'checkoutTickets'])->name('checkoutTickets');
         Route::post('/buytickets/{id}', [CashierController::class, 'buytickets'])->name('cashier.buytickets');

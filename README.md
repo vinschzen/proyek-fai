@@ -7,7 +7,7 @@ TXT.com is a web application for a play theater where you can purchase tickets, 
 ## Table of Contents
 
 - [Installation](#Installation)
-- [Usage](#Usage)
+- [Dependencies](#Dependencies)
 - [Contributing](#Contributing)
 - [Deployment](#Deployment)
 - [License](#License)
