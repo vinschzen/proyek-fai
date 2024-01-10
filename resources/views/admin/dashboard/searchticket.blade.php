@@ -24,11 +24,42 @@
                 @endif
       
             </form>
+        </div>
 
-              </div>
+        <h2 class="text-2xl font-semibold mb-12 m-2">History</h2>
+        <div class="container mx-auto p-4">
+          <table class="min-w-full bg-white border border-gray-300">
+              <thead>
+                  <tr>
+                      <th class="py-2 px-4 border-b">Key</th>
+                      <th class="py-2 px-4 border-b">Specific User</th>
+                      <th class="py-2 px-4 border-b">Created Date</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @forelse ($htickets as $key => $h)
+                      @php
+                          $timestamp = $h['created_at'] / 1000;
+                          $date = new DateTime("@$timestamp");
+                          $formattedDate = $date->format('Y-m-d');
+                      @endphp
+                      <tr>
+                          <td class="py-2 px-4 border-b">{{ $key }}</td>
+                          <td class="py-2 px-4 border-b">{{ $h['specific_user'] }}</td>
+                          <td class="py-2 px-4 border-b">{{ $formattedDate }}</td>
+                      </tr>
+                  @empty
+                      <tr>
+                          <td class="py-2 px-4 border-b" colspan="3">No records found</td>
+                      </tr>
+                  @endforelse
+              </tbody>
+          </table>
+      </div>
+      
             </div>
 
-            </div>
+          </div>
 
 
       </div>
