@@ -283,6 +283,10 @@ class PageController extends Controller
         return view('admin/dashboard/dashboard');
     }
 
+    public function toSearchTicket() {
+        return view('admin/dashboard/searchticket');
+    }
+
     public function toTicket($id) {
         $hticketsSnapshot = $this->database->getReference("htickets/$id")->getSnapshot();
         $hticketData = $hticketsSnapshot->getValue();
@@ -662,6 +666,52 @@ class PageController extends Controller
         return view('admin/history/concessions/details', compact('horder', 'dorders'));
     }
 
+    public function toSearchedTicket(Request $request)
+    {
+        $id = $request->id;
+        $hticketSnapshot = $this->database->getReference("htickets/$id")->getSnapshot();
+        $hticketData = $hticketSnapshot->getValue();
+
+        if ($hticketData && $request->id) {
+            $hticket = [];                                                                      
+
+            if ($hticketData['specific_user'] != 'Anonymous') 
+            {
+                $user = $this->auth->getUser($hticketData['specific_user']);
+                $hticketData['specific_user'] = $user->displayName;
+                $hticketData['uid'] = $user->uid;
+            }
+
+            $schedulesReference = $this->database->getReference('tschedules/' . $hticketData['schedule_id']);
+            $schedulesSnapshot = $schedulesReference->getSnapshot();
+            $schedulesData = $schedulesSnapshot->getValue();
+            
+            $hticketData['date'] = $schedulesData['date'];
+            $hticketData['theater'] = $schedulesData['theater'];
+            $hticketData['time_end'] = $schedulesData['time_end'];
+            $hticketData['time_start'] = $schedulesData['time_start'];
+
+            $playsReference = $this->database->getReference('tplays/' . $schedulesData['playid']);
+            $playsSnapshot = $playsReference->getSnapshot();
+            $playsData = $playsSnapshot->getValue();
+            $hticketData['title'] = $playsData['title'];
+            $hticketData['poster'] = $this->storage->getBucket(env('FIREBASE_STORAGE_BUCKET'))->object($playsData['poster'])->signedUrl(new \DateTime('tomorrow'));
+            $hticketData['description'] = $playsData['description'];
+            $hticketData['age_rating'] = $playsData['age_rating'];
+
+            $hticket = array_merge(['id' => $id], $hticketData);
+
+            $dticketsRef = $this->database->getReference('dtickets');
+            $query = $dticketsRef->orderByChild('htickets')->equalTo($id);
+            $dtickets = $query->getValue();
+
+            return view('admin/history/tickets/details', compact('hticket', 'dtickets'));
+        }
+        else {
+            return redirect()->back()->with("error", "Ticket not found");
+        }
+    }
+    
     public function convertFirebaseTimestamp($timestamp)
     {
         $timestampInSeconds = $timestamp / 1000;

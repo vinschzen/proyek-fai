@@ -31,6 +31,7 @@
             <div class="col-span-6">
               <h3 class="text-2xl font-bold mb-4">{{ $hticket['title'] }}</h3>
 
+              <p class="text-gray-600">ID:  <i class="text-sm text-gray-400">{{$hticket['id']}}</i></p>
               <p class="text-gray-600">Theater: {{ $hticket['theater'] }}</p>
               <p class="text-gray-600">Date: {{ $hticket['date'] }}</p>
               <p class="text-gray-600">Time: {{ $hticket['time_start']}} - {{ $hticket['time_end']}}</p>
