@@ -85,22 +85,26 @@
 
 <main class="container mx-auto mt-8">
 
-    <h1 class="text-3xl font-semibold mb-4">Now Playing</h1>
+    <div class="text-center">
+        <h1 class="text-3xl font-semibold mb-4">Now Playing</h1>
+    </div>
+    <br>
 
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-4 gap-10 justify-center">
         @foreach ($plays as $play)
-        @if (isset($play['deleted_at']))
-        @continue
-        @endif
-        <div>
-            <a href="{{ route('toPlay', $play['id'] )}}">
-                <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 200px"
-                    class="cursor-pointer image-modal-trigger" data-image-url="{{ $play['poster'] }}">
-            </a>
-            <p style="padding-left: 2.2vw">{{$play['title']}}</p>
-        </div>
+            @if (isset($play['deleted_at']))
+                @continue
+            @endif
+            <div class="flex flex-col items-center">
+                <a href="{{ route('toPlay', $play['id'] )}}">
+                    <img src="{{ $play['poster'] }}" alt="{{ $play['title'] }} Poster" style="width: 200px"
+                        class="cursor-pointer image-modal-trigger" data-image-url="{{ $play['poster'] }}">
+                </a>
+                <p class="text-center">{{$play['title']}}</p>
+            </div>
         @endforeach
     </div>
+    
     <br>
 
 </main>
