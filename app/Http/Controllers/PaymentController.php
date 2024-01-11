@@ -36,11 +36,13 @@ class PaymentController extends Controller
         Config::$clientKey = config('services.midtrans.client_key');
         Config::$isProduction = config('services.midtrans.is_production');
 
-
         $transactionDetails = array(
             'transaction_details' => array(
                 'order_id' => rand(),
                 'gross_amount' => $request->amount,
+            ),
+            'customer_details' => array(
+                'email' => $request->session()->get('user')->email,
             ),
             'custom_data' => array(
                 'user_id' => $request->session()->get('user')->uid
