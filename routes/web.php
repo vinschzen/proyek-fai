@@ -10,7 +10,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ConcessionController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\PaymentController;
-
+use App\Http\Controllers\PaymentCallbackController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -179,7 +179,8 @@ Route::middleware(['user'])->group(function () {
     Route::get('/clearcart', [ConcessionController::class, 'clearUsersCart'])->name('clearUsersCart');
 });
 
-Route::post('/callback', [PaymentController::class, 'callback'])->name('callback');
+// Route::post('/callback', [PaymentController::class, 'callback'])->name('callback');
+Route::post('/callback', [PaymentCallbackController::class, 'receive'])->name('callback');
 
 
 

@@ -46,7 +46,9 @@ class PaymentController extends Controller
             ),
             'custom_data' => array(
                 'user_id' => $request->session()->get('user')->uid
-            )
+            ),
+            'finish_redirect_url' => 'https://proyek-fai-t4z6-azure.vercel.app/user/saldo', 
+
         );
 
         $snapToken = Snap::getSnapToken($transactionDetails);
@@ -77,7 +79,7 @@ class PaymentController extends Controller
 
                 $this->auth->setCustomUserClaims($id, ['role' => $currentRole,'saldo' => $newSaldo]);
 
-                $this->refreshLoggedIn($request);
+                // $this->refreshLoggedIn($request);
 
             } elseif ($transactionStatus == 'settlement') {
 
