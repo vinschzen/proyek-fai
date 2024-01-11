@@ -44,7 +44,9 @@
                           $formattedDate = $date->format('Y-m-d');
                       @endphp
                       <tr>
-                          <td class="py-2 px-4 border-b">{{ $key }}</td>
+                          <td class="py-2 px-4 border-b">
+                              <a href="{{ route('detailtickets', $key ) }}">{{ $key }}</a>
+                          </td>
                           <td class="py-2 px-4 border-b">{{ $h['specific_user'] }}</td>
                           <td class="py-2 px-4 border-b">{{ $formattedDate }}</td>
                       </tr>

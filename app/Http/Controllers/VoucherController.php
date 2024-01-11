@@ -113,7 +113,7 @@ class VoucherController extends Controller
                 'if-bought-id.required' => 'At least one "If Bought" product must be selected.',
                 'then-get-id.required' => 'At least one "Then Get" product must be selected.',
                 'discount.required' => 'discount is required.',
-                'discount.numeric' => 'discount must be a numeric value.',                
+                'discount.numeric' =>  'discount must be a numeric value.',                
                 'discount.between' => 'discount must be between 0 and 100.',
             ];
 
