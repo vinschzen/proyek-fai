@@ -122,7 +122,7 @@
                     <button type="button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700" onclick="closeModal()">Close</button>
                 </div>
             </div>
-          </div>
+        </div>
 
 </body>
 
