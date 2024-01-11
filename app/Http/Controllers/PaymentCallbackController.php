@@ -33,12 +33,14 @@ class PaymentCallbackController extends Controller
                     'payment_status' => 4,
                 ]);
             }
- 
-            return response()
-                ->json([
-                    'success' => true,
-                    'message' => 'Notifikasi berhasil diproses',
-                ]);
+
+            return response('OK', 200);
+
+            // return response()
+            //     ->json([
+            //         'success' => true,
+            //         'message' => 'Notifikasi berhasil diproses',
+            //     ]);
         } else {
             return response()
                 ->json([
