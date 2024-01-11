@@ -30,6 +30,13 @@ class PageController extends Controller
                 ->startAt(date('Y-m-d'))
                 ->getValue();
 
+        foreach ($tschedules as $key => $value) {
+            if (isset($value['deleted_at'])) {
+                unset($tschedules[$key]);
+            }
+        }
+        
+
         $playIds = collect($tschedules)->pluck('playid')->unique()->toArray();
         $plays = [];
 
@@ -299,6 +306,8 @@ class PageController extends Controller
             }
 
         }
+
+        $htickets = array_reverse($htickets);
 
         return view('admin/dashboard/searchticket', compact('htickets'));
     }
